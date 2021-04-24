@@ -1,0 +1,102 @@
+
+[Info]
+name = "Sacchin"
+displayname = "Sacchin"
+versiondate = 10,19,2016
+mugenversion = 04,14,2002
+author = "Discord"
+pal.defaults = 1,4,7
+;Bus
+;3104(Satoshi)
+;Zanga
+;Unknown37564
+;Notfound
+;Kira
+;Konton NO kotowarI
+;Glacies
+;Sukima
+; BUSaZ KiNG SuKo
+[Files]
+cmd     = CNS/Sacchin_cmd.cns
+cns     = Sacchin.def ;CNS/Sacchin.cns 
+st      = CNS/Sacchin_etc.cns
+st0     = CNS/Sacchin_Bus.cns
+st1     = CNS/Sacchin_3104.cns
+st2     = CNS/Sacchin_Zanga.cns
+st3     = CNS/Sacchin_Unknown37564.cns
+st4     = CNS/Sacchin_Notfound.cns
+st5     = CNS/Sacchin_Kira.cns
+st6     = CNS/Sacchin_KontonNOkotowarI.cns
+st7     = CNS/Sacchin_Glacies.cns
+st8     = CNS/Sacchin_-2-3.cns
+st9     = config.txt
+stcommon = CNS/Sacchincommon.cns ;Common states
+sprite  = DATA/Sacchin.sff   ;Sprite
+anim    = DATA/Sacchin.air   ;Animation
+sound   = DATA/Sacchin.snd   ;Sound
+pal1    = ACT/Unknown37564.act
+pal2    = ACT/3104.act
+pal3    = ACT/Notfound.act
+pal4    = ACT/Notfound.act
+pal5    = ACT/Notfound.act
+pal6    = ACT/Notfound.act
+pal7    = ACT/Notfound.act
+pal8    = ACT/Notfound.act
+pal9    = ACT/Notfound.act
+pal10   = ACT/Notfound.act
+pal11   = ACT/Notfound.act
+pal11   = ACT/Notfound.act
+
+;==========================================================================================
+
+[Data]                      ;基礎データ定義
+life = 1000                 ;最大ライフ量
+power = 3000                ;最大ゲージ量
+attack = 100                ;攻撃力
+defence = 100               ;防御力
+fall.defence_up = 0         ;落下時防御力上昇量
+liedown.time = 60           ;落下時最大硬直時間
+airjuggle = 15              ;空中コンボ制御数
+sparkno = 6000              ;デフォルトのヒット時Explod番号
+guard.sparkno = 40          ;デフォルトのガード時Explod番号
+KO.echo = 0                 ;KOでエコーするか
+volume = 255                ;音量
+IntPersistIndex = 60        ;最大整数変数使用数
+FloatPersistIndex = 40      ;最大浮動小数変数使用数
+
+[Size]                      ;サイズ定義
+xscale = 1                  ;横幅
+yscale = 1                  ;縦幅
+ground.back = 12            ;後ろ幅
+ground.front = 12           ;前幅
+air.back = 12               ;空中後ろ幅
+air.front = 12              ;空中前幅
+height = 60                 ;身長定義
+attack.dist = 160           ;デフォルトの攻撃圏内定義
+proj.attack.dist = 90       ;デフォルトのProjectile射程距離定義
+proj.doscale = 0            ;Projectileが本体のConstansのScale定義に従うか
+head.pos = 0, -85           ;頭の位置
+mid.pos = 0, -60            ;中心の位置
+shadowoffset = 0            ;影の表示位置
+draw.offset = 0,0           ;表示基準位置
+
+[Velocity]                  ;速度定義
+walk.fwd  = 0.4             ;前歩き速度
+walk.back = -0.4            ;後ろ歩き速度
+run.fwd  = 7.6, 0           ;前ダッシュ速度
+run.back = -7.5,-9          ;後ろダッシュ速度
+jump.neu = 0,-21            ;地上ニュートラルジャンプ速度
+jump.back = -2.55           ;地上後ろジャンプ速度
+jump.fwd = 6              ;地上前ジャンプ速度
+runjump.back = -2,-19     ;後ろ走りジャンプ速度(慣性?)
+runjump.fwd = 12,-23         ;前走りジャンプ速度
+airjump.neu = 0,-15         ;空中ニュートラルジャンプ速度
+airjump.back = -4.55        ;空中後ろジャンプ速度
+airjump.fwd = 2.5           ;空中前ジャンプ速度
+
+[Movement]                  ;動作定義
+airjump.num = 0             ;空中ジャンプ回数
+airjump.height = 0          ;空中ジャンプ高度
+yaccel = .9                 ;重力加速度(Physics=Aで使用)
+stand.friction = .85        ;立ち摩擦係数(Physics=Sで使用)
+crouch.friction = .82       ;座り摩擦係数(Physics=Cで使用)
