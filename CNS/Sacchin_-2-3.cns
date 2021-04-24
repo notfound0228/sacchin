@@ -1,0 +1,198 @@
+;///////////////////////////////////////////////////////////////////////////
+;---------------------------------------------------------------------------
+;
+; Statedef -2
+;
+;---------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////
+[Statedef -2]
+type = U
+
+;---------------------------------------------------------------------------
+;	ヘルパーの常時処理 & ステート固定関係
+;---------------------------------------------------------------------------
+
+[State -2, ChangeState]
+type = SelfState
+trigger1 = IsHelper(99999)
+value = 99999
+ignorehitpause = 1
+
+[State -2, ChangeState]
+type = SelfState
+trigger1 = IsHelper(4999)
+value = 4999
+ignorehitpause = 1
+
+[State -2, Helper時間測定用変数]
+type = varset
+trigger1 = IsHelper
+sysvar(0) = sysvar(0) + 1
+ignorehitpause = 1
+
+[State -2, 影消し]
+type = AssertSpecial
+trigger1 = 1
+flag = Noshadow
+ignorehitpause = 1
+
+[State -2 ,Explod関係]
+type = SelfState
+trigger1 = IsHelper(6007)||IsHelper(6009)
+trigger1 = var(59) := 6007
+trigger2 = IsHelper(6008)
+trigger2 = var(59) := 6008
+trigger3 = IsHelper(6015)||IsHelper(6016)
+trigger3 = var(59) := 6015
+trigger4 = IsHelper(6033)||IsHelper(6046)
+trigger4 = var(59) := 6033
+trigger5 = IsHelper(6035)
+trigger5 = var(59) := 6035
+trigger6 = IsHelper(6040)
+trigger6 = var(59) := 6040
+trigger7 = IsHelper(6027)
+trigger7 = var(59) := 6027
+trigger8 = IsHelper(6058)
+trigger8 = var(59) := 6058
+trigger9 = IsHelper(6062)
+trigger9 = var(59) := 6062
+trigger10= IsHelper(6064)
+trigger10= var(59) := 6064
+trigger11= IsHelper(6065)
+trigger11= var(59) := 6065
+trigger12= IsHelper(6071)
+trigger12= var(59) := 6071
+trigger13= IsHelper(6072)
+trigger13= var(59) := 6072
+trigger14= IsHelper(6075)
+trigger14= var(59) := 6075
+value = var(59)
+ignorehitpause = 1
+
+
+;---------------------------------------------------------------------------
+; DTC周り
+
+[State 0, DisplayToClipboard]
+type = DisplayToClipboard
+trigger1 = !IsHelper
+trigger1 = NumHelper(99999)
+text = "Pos X = %.1f,Enemynear,Pos X = %.1f,Facing = %d\nVAR(0) = %d"
+params = Pos X,Enemynear,Pos X,Facing,Helper(99999),Var(0)
+ignorehitpause = 1
+;persistent = 
+
+;---------------------------------------------------------------------------
+; 変数関係
+
+[State -2, 距離把握]
+type = varset
+trigger1 = !IsHelper
+sysfvar(4) = ( Pos X - EnemyNear,Pos X ) * ifelse( Facing=1 ,-1 ,1 )
+ignorehitpause = 1
+
+[State -2, 距離把握]
+type = varset
+trigger1 = !IsHelper
+trigger1 = !NumHelper(6062)
+var(2) = Power
+ignorehitpause = 1
+
+[State -2, 距離把握]
+type = varset
+trigger1 = !IsHelper
+trigger1 = StateNo != 4011
+trigger1 = NumHelper(6062)
+var(2) = var(2) - 10
+ignorehitpause = 1
+
+;---------------------------------------------------------------------------
+; 演出関係
+
+[State -2, 時止め演出中の時止め]
+type = SuperPause
+trigger1 = !IsHelper
+trigger1 = NumHelper(6062)
+darken = 0
+time = 3
+anim = -1
+pos = 0,0
+movetime = 3
+unhittable = 0
+P2defmul = 1
+ignorehitpause = 1
+
+;---------------------------------------------------------------------------
+; ヘルパー出現とか
+
+; 先行入力認識用ヘルパー暴走防止
+[State 99999, Helper]
+type = Helper
+triggerall = !IsHelper
+trigger1 = !NumHelper(99999)
+helpertype = player
+ownpal = 1
+name = "Command"
+ID = 99999
+stateno = 99999
+pos = 0,0
+postype = p1    ;p2,front,back,left,right
+facing = ifelse(teamside = 1,1,-1)
+keyctrl = 1
+supermovetime = 2147483647
+pausemovetime = 2147483647
+ignorehitpause = 1
+
+; Unknown37564用雑用ヘルパー
+; %nとかやるためのやつ
+[State 99999, Helper]
+type = null;Helper
+triggerall = !IsHelper
+trigger1 = !NumHelper(4999)
+;helpertype = player
+;ownpal = 1
+;name = "G"
+;ID = 4999
+;stateno = 4999
+;pos = 0,0
+;postype = p1    ;p2,front,back,left,right
+;facing = ifelse(teamside = 1,1,-1)
+;keyctrl = 1
+;supermovetime = 2147483647
+;pausemovetime = 2147483647
+;ignorehitpause = 1
+
+;---------------------------------------------------------------------------
+;	本体のステート固定(やらないと思う
+
+[State -2, ステート固定 - Anim型]
+type = Null;SelfState
+triggerall = !IsHelper
+triggerall = PalNo = 2
+trigger1 = Anim = [40,42]
+;value = 40
+ignorehitpause = 1
+
+[State -2, ステート固定 - Anim型]
+type = Null;SelfState
+triggerall = !IsHelper
+triggerall = PalNo = 2
+trigger1 = Anim = [50,52]
+;value = 50
+ignorehitpause = 1
+
+[State -2, ステート固定 - Anim型]
+type = Null;SelfState
+triggerall = !IsHelper
+triggerall = PalNo = 2
+trigger1 = Anim = [47,49]
+;value = 52
+ignorehitpause = 1
+
+[State -2, ステート固定 - Anim型]
+type = Null;SelfState
+triggerall = !IsHelper
+triggerall = StateNo != [5000,5110]
+trigger1 = PalNo = 2
+;value = Anim
+ignorehitpause = 1

@@ -1,0 +1,257 @@
+;///////////////////////////////////////////////////////////////////////////
+;---------------------------------------------------------------------------
+;
+; Notfound
+;
+;---------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////
+[Statedef 6000]
+type = U
+
+[State ]
+type = Null
+trigger1 = 1
+
+
+;---------------------------------------------------------------------------
+; CommandHelper by Notfound
+[Statedef 99999]
+type    = S
+movetype= I
+physics = N
+anim = 0
+
+[State 99999, IsNotHelperDead]
+type = SelfState
+trigger1 = !IsHelper
+value = 5150
+
+[State 99999, IsNotHelperDead]
+type = ScreenBound
+trigger1 = IsHelper
+value = 0
+
+[State 99999, AssertSpecial]
+type = AssertSpecial
+trigger1 = 1
+flag = Invisible
+flag2= NoShadow
+
+[State 99999, NotHitby]
+type = NotHitby
+trigger1 = 1
+value = SCA
+
+[State 99999, PosSet]
+type = PosSet
+trigger1 = !fvar(0)
+x = 0
+y = 0
+
+;-------------------------------
+; 向き 右向きの場合
+[State 99999, VarSet]
+type = VarSet
+trigger1 = Root,Facing = 1
+trigger1 = Root,Pos X < Enemynear,Pos X ; 敵の方が右側
+trigger2 = Root,Facing = -1
+trigger2 = Root,Pos X <= Enemynear,Pos X ; 敵の方が左側
+var(0) = 1
+ignorehitpause = 1
+;-------------------------------
+; 向き 左向き側
+[State 99999, VarSet]
+type = VarSet
+trigger1 = Root,Facing = -1
+trigger1 = Root,Pos X > Enemynear,Pos X ; 敵の方が左側
+trigger2 = Root,Facing = 1
+trigger2 = Root,Pos X >= Enemynear,Pos X ; 敵の方が右側
+var(0) = -1
+ignorehitpause = 1
+
+;-------------------------------
+
+
+;--------------------------------------------------------------------------------------------------
+;	ステージ端探知
+;	左用と右用の2つを射出させて確認を取る
+
+[State ,画面端座標セット]
+type = Null
+triggerall = !fvar(0)&&!fvar(1)
+trigger1 = fvar(0) := Floor(ScreenPos X - Pos X) - FrontEdgeDist + Floor(Pos X*facing)
+trigger1 = fvar(1) := Floor(ScreenPos X - Pos X) - BackEdgedist - Floor(Pos X*facing)
+
+[State ,画面端座標セット]
+type = Null
+trigger1 = var(56) := Floor(ScreenPos X - Pos X)*Facing; - FrontEdgeDist + Floor(Pos X*facing)
+trigger1 = var(57) := Floor(ScreenPos X - Pos X)*-Facing; - BackEdgedist - Floor(Pos X*facing)
+
+[State ,中央からどれだけずれたかセット]
+type = VarSet
+trigger1 = 1
+sysfvar(0) = Pos X - Root,Pos X
+
+[State ,ステージ右側までの距離を測定]
+type = VarSet
+trigger1 = 1
+sysfvar(1) = Abs(sysfvar(0)-fvar(31) -fvar(0))
+
+[State ,ステージ左側までの距離を測定]
+type = VarSet
+trigger1 = 1
+sysfvar(2) = sysfvar(0)-fvar(32) +fvar(1)
+
+[State ,向きに合わせて背面とステージ端との距離を判定]
+type = VarSet
+trigger1 = 1
+sysfvar(3) = ifelse( Root,Facing=1 ,sysfvar(1) ,sysfvar(2) )
+
+[State ,向き判定リセット]
+type = VarSet
+trigger1 = IsHelper
+sysfvar(4) = ifelse( Root,Facing=-1 ,sysfvar(1) ,sysfvar(2) )
+
+[State ,Proj座標の初期値セット]
+type = Null
+triggerall = !var(51)&&!var(52)
+trigger1 = var(51) := var(56)
+trigger1 = var(52) := var(57)
+
+[State ,座標検出Proj消失判定セット - 前面]
+type = Null
+triggerall = (var(50)&1)
+triggerall = fvar(31) = 0
+triggerall = !Root,NumProjID(var(51)+200)
+trigger1 = !(var(58)&1)
+trigger1 = var(53) := var(51)-100
+trigger1 = var(58) := (var(58)|1)
+trigger1 = var(51) := var(53)
+trigger2 = (var(58)&1)
+trigger2 = !(var(58)&4)
+trigger2 = var(53) := var(51)-5
+trigger2 = var(58) := (var(58)|4)
+trigger2 = 1 || var(51) := var(53)
+trigger3 = (var(58)&4)
+trigger3 = !(var(58)&16)
+trigger3 = var(58) := (var(58)|16)
+
+[State ,座標検出Proj消失判定セット - 後面]
+type = Null
+triggerall = (var(50)&1)
+triggerall = fvar(32) = 0
+triggerall = !Root,NumProjID(var(52)+10200)
+trigger1 = !(var(58)&2)
+trigger1 = var(54) := var(52)+100
+trigger1 = var(58) := (var(58)|2)
+trigger1 = var(52) := var(54)
+trigger2 = (var(58)&2)
+trigger2 = !(var(58)&8)
+trigger2 = var(54) := var(52)+5
+trigger2 = var(58) := (var(58)|8)
+trigger2 = var(52) := var(54)
+trigger3 = (var(58)&8)
+trigger3 = !(var(58)&32)
+trigger3 = var(58) := (var(58)|32)
+
+[State ,最終ステージ前面端検出]
+type = Null
+triggerall = (var(58)&16)
+triggerall = fvar(31) = 0
+trigger1 = fvar(31) := var(51) - (Floor(ScreenPos X - Pos X) - FrontEdgeDist + Floor(Pos X*facing))*2
+
+[State ,最終ステージ後面検出]
+type = Null
+triggerall = (var(58)&32)
+triggerall = fvar(32) = 0
+trigger1 = fvar(32) := var(52) + (Floor(ScreenPos X - Pos X) - BackEdgedist - Floor(Pos X*facing))*2
+
+[State ,Proj射出フラグをリセット]
+type = Null
+trigger1 = var(50) := (var(50)&1^-1)
+
+[State ,Proj座標&IDセット用変数セット - 前面]
+type = Null
+triggerall = fvar(31) = 0
+trigger1 = !(var(58)&1)
+trigger1 = var(51) := var(51) + 100
+trigger2 = (var(58)&1)
+trigger2 = !(var(58)&4)
+trigger2 = var(51) := var(51) + 5
+trigger3 = (var(58)&1)&&(var(58)&4)
+trigger3 = !(var(58)&16)
+trigger3 = var(51) := var(51) + 1
+
+[State ,Proj座標&IDセット用変数セット - 後面]
+type = Null
+triggerall = fvar(32) = 0
+trigger1 = !(var(58)&2)
+trigger1 = var(52) := var(52) - 100
+trigger2 = (var(58)&2)
+trigger2 = !(var(58)&4)
+trigger2 = var(52) := var(52) - 5
+trigger3 = (var(58)&2)&&(var(58)&8)
+trigger3 = !(var(58)&32)
+trigger3 = var(52) := var(52) - 1
+
+[State 25000, 前面検出用]
+Type = Projectile
+Triggerall = fvar(31) = 0
+Trigger1 = var(50) := (var(50)|1)
+Attr = A, AP
+HitFlag = 
+GuardFlag = 
+ProjID = var(51)+200
+ProjAnim = 0
+Offset = var(51),0
+Velocity = 1,-1
+ProjStageBound = 0
+ProjEdgeBound = 999999999
+ProjRemoveTime = 1
+ProjScale = 0,0
+PosType = P1
+SuperMoveTime = 999999999
+PauseMoveTime = 999999999
+Guard.Dist = 0
+
+[State 25000, 左端検出用]
+Type = Projectile
+Triggerall = fvar(32) = 0
+Trigger1 = var(50) := (var(50)|1)
+Attr = A, AP
+HitFlag = 
+GuardFlag = 
+ProjID = var(52)+10200
+ProjAnim = 0
+Offset = var(52),0
+Velocity = -1,-1
+ProjStageBound = 0
+ProjEdgeBound = 999999999
+ProjRemoveTime = 1
+ProjScale = 0,0
+PosType = P1
+SuperMoveTime = 999999999
+PauseMoveTime = 999999999
+Guard.Dist = 0
+
+;------------------------------------------------------------------------------
+
+[State 99999, 本体の現在StateNoを計測]
+type = VarSet
+trigger1 = IsHelper
+sysvar(3) = sysvar(2)
+ignorehitpause = 1
+
+[State 99999, 本体の現在StateNoを計測]
+type = VarSet
+trigger1 = IsHelper
+trigger1 = Root,sysvar(4) = -2147483647 + GameTime
+sysvar(2) = Root,StateNo
+ignorehitpause = 1
+
+[State 200]
+type = SelfState
+trigger1 = 1
+value = ifelse( MoveType=I ,5150 ,120 )
+ctrl = 0
+ignorehitpause = 1
