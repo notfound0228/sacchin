@@ -171,23 +171,74 @@ command = s
 time = 1
 
 ;-| Hold Dir |--------------------------------------------------------------
+
 [Command]
-name = "holdfwd";Required (do not remove)
+Name = "holdx"
+Command = /x
+Time = 1
+
+[Command]
+Name = "holdy"
+Command = /y
+Time = 1
+
+[Command]
+Name = "holdz"
+Command = /z
+Time = 1
+
+[Command]
+Name = "holda"
+Command = /a
+Time = 1
+
+[Command]
+Name = "holdb"
+Command = /b
+Time = 1
+
+[Command]
+Name = "holdc"
+Command = /c
+Time = 1
+
+[Command]
+Name = "holdfu"
+Command = /$UF
+Time = 1
+
+[Command]
+Name = "holdbu"
+Command = /$UB
+Time = 1
+
+[Command]
+Name = "holdfd"
+Command = /$DF
+Time = 1
+
+[Command]
+Name = "holdbd"
+Command = /$DB
+Time = 1
+
+[Command]
+name = "holdfwd"
 command = /$F
 time = 1
 
 [Command]
-name = "holdback";Required (do not remove)
+name = "holdback"
 command = /$B
 time = 1
 
 [Command]
-name = "holdup" ;Required (do not remove)
+name = "holdup"
 command = /$U
 time = 1
 
 [Command]
-name = "holddown";Required (do not remove)
+name = "holddown"
 command = /$D
 time = 1
 
@@ -242,8 +293,57 @@ trigger1 = IsHelper(99999)
 value = 99999
 ignorehitpause = 1
 
+[State -1, デバッグ用キー]
+type = null;SelfState
+value = 3000
+triggerall = command = "start"
+trigger1 = statetype != A
+trigger1 = ctrl
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
+trigger2 = MoveContact
+
+;---------------------------------------------------------------------------
+;残河必殺技
+
+[State -1, 236236C]
+type = SelfState
+value = 3500
+triggerall = command = "236236C"
+trigger1 = statetype != C
+trigger1 = ctrl
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
+trigger2 = MoveContact
+
+[State -1, 236236A]
+type = SelfState
+value = 3100
+triggerall = command = "236236A"
+trigger1 = statetype != C
+trigger1 = ctrl
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
+trigger2 = MoveContact
+
+[State -1, 3C]
+type = SelfState
+value = 3000
+triggerall = command = "holdfd"
+triggerall = command = "c"
+trigger1 = statetype != A
+trigger1 = ctrl
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
+trigger2 = MoveContact
+
 ;---------------------------------------------------------------------------
 ;Unknown37564必殺技
+
+[State -1, 236236B]
+type = SelfState
+value = 4036
+triggerall = command = "236236B"
+trigger1 = statetype != A
+trigger1 = ctrl
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
+trigger2 = MoveContact
 
 [State -1, 623A]
 type = SelfState
@@ -251,7 +351,7 @@ value = 4001
 triggerall = command = "623A"
 trigger1 = statetype != A
 trigger1 = ctrl
-trigger2 = StateNo = [200,320]
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
 trigger2 = MoveContact
 
 [State -1, 623B]
@@ -260,7 +360,7 @@ value = 4004
 triggerall = command = "623B"
 trigger1 = statetype != A
 trigger1 = ctrl
-trigger2 = StateNo = [200,320]
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
 trigger2 = MoveContact
 
 [State -1, 623C]
@@ -269,7 +369,7 @@ value = 4011
 triggerall = command = "623C"
 trigger1 = statetype != A
 trigger1 = ctrl
-trigger2 = StateNo = [200,320]
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
 trigger2 = MoveContact
 
 [State -1, 22A]
@@ -285,7 +385,7 @@ value = 4010
 triggerall = command = "22B"
 trigger1 = statetype != A
 trigger1 = ctrl
-trigger2 = StateNo = [200,320]
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
 trigger2 = MoveContact
 
 [State -1, 22C]
@@ -296,7 +396,7 @@ trigger1 = statetype != A
 trigger1 = ctrl
 trigger1 = Power >= 3000
 trigger1 = var(0) := 1
-trigger2 = StateNo = [200,320]
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
 trigger2 = MoveContact
 trigger2 = var(0) := 1
 
@@ -307,7 +407,7 @@ triggerall = command = "22C"
 trigger1 = statetype != A
 trigger1 = ctrl
 trigger1 = 1 || var(0) := 0
-trigger2 = StateNo = [200,320]
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
 trigger2 = MoveContact
 trigger2 = 1 || var(0) := 0
 
@@ -317,16 +417,7 @@ value = 4030
 triggerall = command = "236A"
 trigger1 = statetype != A
 trigger1 = ctrl
-trigger2 = StateNo = [200,320]
-trigger2 = MoveContact
-
-[State -1, 236B]
-type = SelfState
-value = 4036
-triggerall = command = "236236B"
-trigger1 = statetype != A
-trigger1 = ctrl
-trigger2 = StateNo = [200,320]
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
 trigger2 = MoveContact
 
 [State -1, 236B]
@@ -335,7 +426,7 @@ value = 4035
 triggerall = command = "236B"
 trigger1 = statetype != A
 trigger1 = ctrl
-trigger2 = StateNo = [200,320]
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
 trigger2 = MoveContact
 
 [State -1, 236C]
@@ -344,7 +435,7 @@ value = 4040
 triggerall = command = "236C"
 trigger1 = statetype != A
 trigger1 = ctrl
-trigger2 = StateNo = [200,320]
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
 trigger2 = MoveContact
 
 [State -1, 214A]
@@ -353,7 +444,7 @@ value = 4050
 triggerall = command = "214A"
 trigger1 = statetype != A
 trigger1 = ctrl
-trigger2 = StateNo = [200,320]
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
 trigger2 = MoveContact
 
 [State -1, 214B]
@@ -362,7 +453,7 @@ value = 4051
 triggerall = command = "214B"
 trigger1 = statetype != A
 trigger1 = ctrl
-trigger2 = StateNo = [200,320]
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
 trigger2 = MoveContact
 
 [State -1, 214C]
@@ -371,7 +462,7 @@ value = 4052
 triggerall = command = "214C"
 trigger1 = statetype != A
 trigger1 = ctrl
-trigger2 = StateNo = [200,320]
+trigger2 = (StateNo=[200,320])||(StateNo=3000)
 trigger2 = MoveContact
 
 ;===========================================================================
@@ -380,7 +471,7 @@ trigger2 = MoveContact
 ;ダッシュ
 [State -1, Run Fwd]
 type = SelfState
-value = 100
+value = 3750
 triggerall = NumHelper(99999)
 triggerall = (Helper(99999),Command = "FF" && Helper(99999),var(0) = 1)||(Helper(99999),Command = "BB" && Helper(99999),var(0) = -1)
 triggerall = statetype != A
@@ -396,6 +487,7 @@ triggerall = NumHelper(99999)
 triggerall = (Helper(99999),Command = "BB" && Helper(99999),var(0) = 1)||(Helper(99999),Command = "FF" && Helper(99999),var(0) = -1)
 trigger1 = statetype != A
 trigger1 = ctrl
+
 
 ;===========================================================================
 ;---------------------------------------------------------------------------

@@ -909,7 +909,6 @@ Type = TargetBind
 Trigger1 = AnimElemNo(0) = 13
 Pos = 0,0
 
-
 [State 8400, Hit Definition]
 Type = HitDef
 Trigger1 = AnimElemTime(1) = 0
@@ -922,7 +921,7 @@ GuardFlag =
 PauseTime = 0,0
 SparkNo    = s3501
 SparkXY    = -10,-70
-Hitsound   = s1,4
+Hitsound   = s3000,10
 Guardsound = -1
 AnimType         = Hard
 Ground.Type      = Low
@@ -1012,7 +1011,7 @@ Value = 5120
 
 ;---------------------------------------------------------------------------
 ;歩き
-[Statedef 30]
+[Statedef 3730]
 type    = S
 physics = S
 SprPriority = 5
@@ -1113,7 +1112,7 @@ Value = 0,0;足音
 Channel = 4
 [State -1]
 Type = PlaySnd
-Trigger1 = AnimElemTime(8) = 0
+Trigger1 = AnimElemTime(13) = 0
 Value = 0,0;足音
 Channel = 4
 
@@ -1121,7 +1120,7 @@ Channel = 4
 type = ChangeState
 Trigger1 = Var(59) = 0
 trigger1 = command != "holdfwd"
-value = 22
+value = 3722
 
 [State -1]
 Type = Null;SelfState
@@ -1132,7 +1131,7 @@ IgnoreHitPause = 1
 
 ;---------------------------------------------------------------------------
 ;後退
-[Statedef 31]
+[Statedef 3731]
 type    = S
 physics = S
 SprPriority = 5
@@ -1209,12 +1208,12 @@ x = -7
 
 [State -1]
 Type = PlaySnd
-Trigger1 = AnimElemTime(4) = 0
+Trigger1 = AnimElemTime(6) = 0
 Value = 0,0;足音
 Channel = 4
 [State -1]
 Type = PlaySnd
-Trigger1 = AnimElemTime(8) = 0
+Trigger1 = AnimElemTime(11) = 0
 Value = 0,0;足音
 Channel = 4
 
@@ -1222,7 +1221,7 @@ Channel = 4
 type = ChangeState
 Trigger1 = Var(59) = 0
 trigger1 = command != "holdback"
-value = 23
+value = 3723
 
 [State -1]
 Type = Null;SelfState
@@ -1233,7 +1232,7 @@ IgnoreHitPause = 1
 
 ;---------------------------------------------------------------------------
 ;歩き終わり
-[Statedef 22]
+[Statedef 3722]
 type    = S
 physics = S
 SprPriority = 5
@@ -1241,109 +1240,109 @@ SprPriority = 5
 
 [State 21]
 type = PosAdd
-trigger1 = Anim = 20
-trigger1 = AnimElemNo(0) = 21||AnimElemNo(0) = [2,3]
+trigger1 = Anim = 3730
+trigger1 = AnimElemNo(0) = 21;||AnimElemNo(0) = 3[2,3]
 x = 3+5
 [State 20]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 4
 x = 11+5
 [State 20]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 5
 x = 13+5
 [State 20]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 6
 x = 7+5
 
 [State 20]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 7
 x = 4+5
 [State 20]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 8
 x = 9+5
 
 [State 21]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 9
 x = 12+5
 [State 21]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 10
 x = 10+5
 
 [State 21]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 11
 x = 3+5
 [State 21]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 12
 x = 9+5
 
 [State 21]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 13
 x = 13+5
 [State 21]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 14
 x = 14+5
 
 [State 21]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 15
 x = 8
 [State 21]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 16
 x = 3
 [State 21]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 17
 x = 0
 [State 21]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 18
 x = -2
 [State 21]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 19
 x = -3
 [State 21]
 type = PosAdd
-trigger1 = Anim = 20
+trigger1 = Anim = 3730
 trigger1 = AnimElemNo(0) = 20
 x = 2
 
 [State -1, Anim]
 Type = ChangeAnim
-Trigger1 = Anim != 22
-Value = 22
+Trigger1 = Anim != 3722
+Value = 3722
 IgnoreHitPause = 1
 
 [State -1]
 type = ChangeState
-Trigger1 = Anim = 22
+Trigger1 = Anim = 3722
 Trigger1 = AnimTime = 0
 value = 0
 ctrl = 1
@@ -1356,8 +1355,8 @@ IgnoreHitPause = 1
 
 
 ;---------------------------------------------------------------------------
-;後退
-[Statedef 23]
+;後退終わり
+[Statedef 3723]
 type    = S
 physics = S
 SprPriority = 5
@@ -1376,84 +1375,84 @@ X = 0
 
 [State 21]
 type = PosAdd
-trigger1 = Anim = 31
+trigger1 = Anim = 3731
 trigger1 = AnimElemTime(2) = 0
 x = 8
 [State 20]
 type = PosAdd
-trigger1 = Anim = 31
+trigger1 = Anim = 3731
 trigger1 = AnimElemTime(3) = 0||AnimElemTime(4) = 0
 x = 11
 [State 20]
 type = PosAdd
-trigger1 = Anim = 31
+trigger1 = Anim = 3731
 trigger1 = AnimElemTime(5) = 0
 x = 14
 [State 20]
 type = PosAdd
-trigger1 = Anim = 31
+trigger1 = Anim = 3731
 trigger1 = AnimElemTime(6) = 0
 x = 9
 [State 20]
 type = PosAdd
-trigger1 = Anim = 31
+trigger1 = Anim = 3731
 trigger1 = AnimElemTime(7) = 0
 x = 0
 [State 20]
 type = PosAdd
-trigger1 = Anim = 31
+trigger1 = Anim = 3731
 trigger1 = AnimElemTime(8) = 0
 x = -10
 [State 21]
 type = PosAdd
-trigger1 = Anim = 31
+trigger1 = Anim = 3731
 trigger1 = AnimElemTime(9) = 0
 x = -14
 [State 21]
 type = PosAdd
-trigger1 = Anim = 31
+trigger1 = Anim = 3731
 trigger1 = AnimElemTime(10) = 0
 x = -17
 [State 21]
 type = PosAdd
-trigger1 = Anim = 31
+trigger1 = Anim = 3731
 trigger1 = AnimElemTime(11) = 0
 x = -18
 [State 21]
 type = PosAdd
-trigger1 = Anim = 31
+trigger1 = Anim = 3731
 trigger1 = AnimElemTime(12) = 0
 x = -14
 [State 21]
 type = PosAdd
-trigger1 = Anim = 31
+trigger1 = Anim = 3731
 trigger1 = AnimElemTime(13) = 0
 x = -10
 [State 21]
 type = PosAdd
-trigger1 = Anim = 31
+trigger1 = Anim = 3731
 trigger1 = AnimElemTime(14) = 0
 x = -1
 [State 21]
 type = PosAdd
-trigger1 = Anim = 31
+trigger1 = Anim = 3731
 trigger1 = AnimElemTime(15) = 0
 x = 6
 [State 21]
 type = PosAdd
-trigger1 = Anim = 31
+trigger1 = Anim = 3731
 trigger1 = AnimElemTime(16) = 0
 x = 12
 
 [State -1, Anim]
 Type = ChangeAnim
-Trigger1 = Anim != 23
-Value = 23
+Trigger1 = Anim != 3723
+Value = 3723
 IgnoreHitPause = 1
 
 [State -1]
 type = ChangeState
-Trigger1 = Anim = 23
+Trigger1 = Anim = 3723
 Trigger1 = AnimTime = 0
 value = 0
 ctrl = 1
@@ -1467,85 +1466,85 @@ IgnoreHitPause = 1
 
 ;---------------------------------------------------------------------------
 ;走る・改
-[Statedef 100]
+[Statedef 3750]
 type     = S
 movetype = A
 physics  = N
-anim     = 100
+anim     = 3750
 ctrl     = 0
 sprpriority = 4
 facep2 = 0
 
-[State 100, 位置]
+[State 3750, 位置]
 type = PosSet
 trigger1 = 1
 Y = 0
 
-[State 100, 位置]
+[State 3750, 位置]
 type = VelSet
 trigger1 = AnimElemTime(1) = 0
 X = 0
 Value = 1
 
-[State 100, 位置]
+[State 3750, 位置]
 type = VarSet
 trigger1 = AnimElemTime(1) = 0
 V = 0
 Value = 0
-[State 100, 位置]
+[State 3750, 位置]
 type = VarAdd
 trigger1 = AnimElemTime(4) > 0
 V = 0
 Value = 1
 
-[State 100, 1]
+[State 3750, 1]
 type = VelSet
 trigger1 = 1
 X = Var(0)*Var(0);*0.1
 
-[State 100, 2]
+[State 3750, 2]
 type = AssertSpecial
 trigger1 = 1
 flag = NoWalk
 flag2 = NoAutoTurn
 ignorehitpause = 1
 
-[State 100, 4]
+[State 3750, 4]
 type = ChangeAnim
 trigger1 = Vel X > 10
 trigger1 = AnimElemTime(5) = 2
-value = 100
+value = 3750
 Elem = 6
-[State 100, 4]
+[State 3750, 4]
 type = ChangeAnim
 trigger1 = Vel X > 10
 trigger1 = AnimElemTime(6) = 2
-value = 100
+value = 3750
 Elem = 7
-[State 100, 4]
+[State 3750, 4]
 type = ChangeAnim
 trigger1 = Vel X > 10
 trigger1 = AnimElemTime(7) = 2
-value = 100
+value = 3750
 Elem = 5
 
-[State 100, 4]
+[State 3750, 4]
 type = ChangeAnim
 trigger1 = Vel X > 20
 trigger1 = AnimElemTime(5) = 1
-value = 100
+value = 3750
 Elem = 6
-[State 100, 4]
+[State 3750, 4]
 type = ChangeAnim
 trigger1 = Vel X > 20
 trigger1 = AnimElemTime(6) = 1
-value = 100
+value = 3750
 Elem = 7
-[State 100, 4]
+[State 3750, 4]
 type = ChangeAnim
 trigger1 = Vel X > 20
 trigger1 = AnimElemTime(7) = 1
-value = 100
+value = 3750
 Elem = 5
 
 [State 3100,エフェクト(煙？オーラ？)(Add)]
@@ -1579,7 +1578,7 @@ GuardFlag = MA
 PauseTime = 22,22
 SparkNo = s103
 SparkXY = -10,-70
-HitSound = s1,4
+HitSound = s3000,10
 GuardSound = -1
 Ground.Type = High
 Ground.SlideTime = 12
@@ -1594,18 +1593,18 @@ envshake.ampl  = 24
 envshake.freq  = 90
 envshake.phase = 180
 
-[State 100, 4]
+[State 3750, 4]
 type = Turn
 trigger1 = AnimElemNo(0) = [5,7]
 trigger1 = Random <= 10
 ignorehitpause = 1
-[State 100, 4]
+[State 3750, 4]
 type = VelMul
 trigger1 = AnimElemNo(0) = [5,7]
 trigger1 = Random <= 10
 Value = -1
 ignorehitpause = 1
-[State 100, 4]
+[State 3750, 4]
 type = VarSet
 trigger1 = AnimElemNo(0) = [5,7]
 trigger1 = Random <= 10
@@ -1613,35 +1612,35 @@ V = 0
 Value = 1
 ignorehitpause = 1
 
-[State 100, 4]
+[State 3750, 4]
 type = ChangeState
 trigger1 = command != "holdfwd"
 trigger1 = command != "holdback"
-value = 101
+value = 3751
 
 ;---------------------------------------------------------------------------
 ;
-[Statedef 101]
+[Statedef 3751]
 type    = S
 physics = N
 ctrl = 0
 anim = 101
 
-[State 106, 2]
+[State 3751, 2]
 type = PosSet
 trigger1 = Time = 0
 y = 0
 
-[State 106, 1]
+[State 3751, 1]
 type = VelSet
 trigger1 = 1
 y = 0
 
-[State 106, 1]
+[State 3751, 1]
 type = VelMul
 trigger1 = 1
 x = .9
-[State 106, 4]
+[State 3751, 4]
 type = ChangeState
 trigger1 = AnimTime = 0
 value = 0

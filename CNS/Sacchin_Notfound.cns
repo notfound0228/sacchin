@@ -5,6 +5,14 @@
 ;
 ;---------------------------------------------------------------------------
 ;///////////////////////////////////////////////////////////////////////////
+[Statedef 6000]
+type = U
+
+[State ]
+type = Null
+trigger1 = 1
+
+
 ;---------------------------------------------------------------------------
 ; CommandHelper by Notfound
 [Statedef 99999]
@@ -247,116 +255,3 @@ trigger1 = 1
 value = ifelse( MoveType=I ,5150 ,120 )
 ctrl = 0
 ignorehitpause = 1
-
-;---------------------------------------------------------------------------
-;@ŒŒ“f‚«
-;---------------------------------------------------------------------------
-[Statedef 6000]
-Type = S ;U,S,C,A,L
-Movetype = A ;U,I,A,H
-Physics = S ;U,S,C,A,N
-Anim = 6000
-Ctrl = 0
-
-[State 0, Explod]
-type = Explod
-ownpal = 1
-trigger1 = Animelemtime(7) = -1
-anim = 6002
-ID = 6002
-pos = 27,-54
-postype = p1  ;p2,front,back,left,right
-bindtime = 1
-removetime = -2
-scale = 1,0.8
-sprpriority = 1
-ontop = 0
-shadow = 0,0,0
-removeongethit = 0
-
-[State 6000, ChangeState]
-type = ChangeState
-trigger1 = time = 160
-value = 0
-ctrl = 1
-;anim =
-;ignorehitpause = 
-;persistent = 
-
-
-;---------------------------------------------------------------------------
-; ‚È‚­
-;---------------------------------------------------------------------------
-[Statedef 6010]
-Type = C ;U,S,C,A,L
-Movetype = I ;U,I,A,H
-Physics = C ;U,S,C,A,N
-Anim = 6010
-Ctrl = 0
-
-[State 6010, PowerAdd]
-type = PowerAdd
-triggerall = Animelemtime(7) >= 0
-trigger1 = Animelemtime(7) % 3 = 0
-value = 10
-
-[State 6010, LifeAdd]
-type = LifeAdd
-triggerall = Animelemtime(7) >= 0
-trigger1 = Animelemtime(7) % 3 = 0
-value = 10
-
-[State 0, Explod]
-type = Explod
-ownpal = 1
-trigger1 = Animelemtime(7) = 0
-anim = 6001
-ID = 6001
-pos = 0,0
-postype = p1  ;p2,front,back,left,right
-facing = 1
-vfacing = 1
-bindtime = 1
-vel = 0,0
-accel = 0,0
-random = 0,0
-removetime = -1
-scale = 0,0
-sprpriority = -4
-ontop = 0
-shadow = 0,0,0
-removeongethit = 0
-
-[State 0, ModifyExplod]
-type = ModifyExplod
-trigger1 = Animelemtime(7) >= 0
-ID = 6001
-scale = 0.01*Animelemtime(7),0.01*Animelemtime(7)
-
-
-
-
-
-
-[State 6010, ChangeState]
-type = ChangeState
-trigger1 = Life = LifeMax
-trigger1 = Power = PowerMax
-value = 6011
-ctrl = 0
-
-;---------------------------------------------------------------------------
-; ‚È‚­ end
-;---------------------------------------------------------------------------
-[Statedef 6011]
-Type = S ;U,S,C,A,L
-Movetype = I ;U,I,A,H
-Physics = S ;U,S,C,A,N
-Anim = 6011
-Ctrl = 0
-
-[State 6011, ChangeState]
-type = ChangeState
-trigger1 = Animtime = 0
-value = 0
-ctrl = 1

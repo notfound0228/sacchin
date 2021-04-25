@@ -38,34 +38,34 @@ ignorehitpause = 1
 
 [State -2 ,ExplodŠÖŒW]
 type = SelfState
-trigger1 = IsHelper(6007)||IsHelper(6009)
-trigger1 = var(59) := 6007
-trigger2 = IsHelper(6008)
-trigger2 = var(59) := 6008
-trigger3 = IsHelper(6015)||IsHelper(6016)
-trigger3 = var(59) := 6015
-trigger4 = IsHelper(6033)||IsHelper(6046)
-trigger4 = var(59) := 6033
-trigger5 = IsHelper(6035)
-trigger5 = var(59) := 6035
-trigger6 = IsHelper(6040)
-trigger6 = var(59) := 6040
-trigger7 = IsHelper(6027)
-trigger7 = var(59) := 6027
-trigger8 = IsHelper(6058)
-trigger8 = var(59) := 6058
-trigger9 = IsHelper(6062)
-trigger9 = var(59) := 6062
-trigger10= IsHelper(6064)
-trigger10= var(59) := 6064
-trigger11= IsHelper(6065)
-trigger11= var(59) := 6065
-trigger12= IsHelper(6071)
-trigger12= var(59) := 6071
-trigger13= IsHelper(6072)
-trigger13= var(59) := 6072
-trigger14= IsHelper(6075)
-trigger14= var(59) := 6075
+trigger1 = IsHelper(4107)||IsHelper(4109)
+trigger1 = var(59) := 4107
+trigger2 = IsHelper(4108)
+trigger2 = var(59) := 4108
+trigger3 = IsHelper(4115)||IsHelper(4116)
+trigger3 = var(59) := 4115
+trigger4 = IsHelper(4133)||IsHelper(4146)
+trigger4 = var(59) := 4133
+trigger5 = IsHelper(4135)
+trigger5 = var(59) := 4135
+trigger6 = IsHelper(4140)
+trigger6 = var(59) := 4140
+trigger7 = IsHelper(4127)
+trigger7 = var(59) := 4127
+trigger8 = IsHelper(4158)
+trigger8 = var(59) := 4158
+trigger9 = IsHelper(4162)
+trigger9 = var(59) := 4162
+trigger10= IsHelper(4164)
+trigger10= var(59) := 4164
+trigger11= IsHelper(4165)
+trigger11= var(59) := 4165
+trigger12= IsHelper(4171)
+trigger12= var(59) := 4171
+trigger13= IsHelper(4172)
+trigger13= var(59) := 4172
+trigger14= IsHelper(4175)
+trigger14= var(59) := 4175
 value = var(59)
 ignorehitpause = 1
 

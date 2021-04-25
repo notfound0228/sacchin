@@ -93,6 +93,20 @@ type    = S
 physics = S
 sprpriority = 0
 
+[State 20, 残河さん作成の歩きへ移動]
+type = SelfState
+triggerall = NumHelper(99999)
+triggerall = (Helper(99999),Command="holdfwd"&&Facing=1)||(Helper(99999),Command="holdback"&&Facing=-1)
+trigger1 = !Var(59)
+value = 3730
+
+[State 20, 残河さん作成の後ろ歩きへ移動]
+type = SelfState
+triggerall = NumHelper(99999)
+triggerall = (Helper(99999),Command="holdback"&&Facing=1)||(Helper(99999),Command="holdfwd"&&Facing=-1)
+trigger1 = !Var(59)
+value = 3731
+
 [State 20, 1] ; 変更
 type = VelSet
 ;trigger1 = command = "holdfwd"
@@ -352,14 +366,14 @@ value = ifelse(Anim=51, 48, ifelse(Anim=52, 49, 47))
 type = Helper
 triggerall = PrevStateNo = 50
 trigger1 = AnimElem = 1
-ID = 6015
-StateNo = 6015
+ID = 4115
+StateNo = 4115
 name = "Explod_Helper"
 helpertype = Player
 keyctrl = 0
 ownpal = 0
-Size.XScale = 1
-Size.YScale = 1
+Size.XScale = 1.5
+Size.YScale = 1.5
 SuperMoveTime = 2147483647 * NumHelper(6062)
 PauseMoveTime = 2147483647 * NumHelper(6062)
 ignorehitpause = 1
@@ -368,17 +382,23 @@ ignorehitpause = 1
 type = Helper
 triggerall = PrevStateNo = 50
 trigger1 = AnimElem = 1
-ID = 6016
-StateNo = 6015
+ID = 4116
+StateNo = 4115
 name = "Explod_Helper"
 helpertype = Player
 keyctrl = 0
 ownpal = 0
-Size.XScale = 1
-Size.YScale = 1
+Size.XScale = 1.5
+Size.YScale = 1.5
 SuperMoveTime = 2147483647 * NumHelper(6062)
 PauseMoveTime = 2147483647 * NumHelper(6062)
 ignorehitpause = 1
+
+[State 52]
+type = EnvShake
+trigger1 = AnimElem = 1
+time = 10
+Ampl = 10
 
 [State 52, 1]
 type = VelSet
@@ -389,35 +409,6 @@ y = 0
 type = PosSet
 trigger1 = sysvar(1) = 0
 y = 0
-
-
-; 追加
-[State 52, OriginalgroundExplod]
-type = Explod
-ownpal = 1
-trigger1 = Animelem = 2
-anim = 6999
-ID = 6999
-pos = 0,0
-postype = p1  ;p2,front,back,left,right
-facing = 1
-vfacing = 1
-bindtime = 1
-vel = 0,0
-accel = 0,0
-random = 0,0
-removetime = -2
-scale = 0.25,0.25
-sprpriority = -1
-ontop = 0
-shadow = 0,0,0
-removeongethit = 0
-;ignorehitpause =
-;trans = 
-;persistent =
-;supermovetime = 0
-;pausemovetime = 0
-
 
 [State 52, 3]
 type = null;CtrlSet
@@ -431,7 +422,7 @@ trigger1 = AnimTime = 0
 value = 0
 ctrl = 1
 
-[Statedef 6015]
+[Statedef 4115]
 type = S
 movetype = A
 physics = N
@@ -453,29 +444,29 @@ ignorehitpause = 1
 
 [State 6007, 1]
 type = ChangeAnim
-triggerall = isHelper(6015)
-trigger1 = Anim != 6015
-value = 6015
+triggerall = isHelper(4115)
+trigger1 = Anim != 4115
+value = 4115
 ignorehitpause = 1
 
 [State 6007, 1]
 type = ChangeAnim
-triggerall = isHelper(6016)
-trigger1 = NumHelper(6015)
-value = 6048
-elem = Helper(6015),AnimElemNo(0)
+triggerall = isHelper(4116)
+trigger1 = NumHelper(4115)
+value = 4148
+elem = Helper(4115),AnimElemNo(0)
 ignorehitpause = 1
 
 [State 6007, 1]
 type = PlaySnd
-triggerall = isHelper(6015)
+triggerall = isHelper(4115)
 trigger1 = AnimElem = 1
 value = s0,49
 ignorehitpause = 1
 
 [State 200, 1]
 type = HitDef
-triggerall = isHelper(6015)
+triggerall = isHelper(4115)
 trigger1 = !MoveContact
 trigger1 = AnimElemTime(9) < 0
 attr = S, NA
@@ -653,33 +644,6 @@ type = MakeDust
 trigger1 = Time = 2
 pos = -5,-2
 spacing = 1
-
-; 追加
-[State 52, OriginalgroundExplod]
-type = Explod
-ownpal = 1
-trigger1 = Animelem = 2
-anim = 6999
-ID = 6999
-pos = 0,0
-postype = p1  ;p2,front,back,left,right
-facing = 1
-vfacing = 1
-bindtime = 1
-vel = 0,0
-accel = 0,0
-random = 0,0
-removetime = -2
-scale = 0.25,0.25
-sprpriority = -1
-ontop = 0
-shadow = 0,0,0
-removeongethit = 0
-;ignorehitpause =
-;trans = 
-;persistent =
-;supermovetime = 0
-;pausemovetime = 0
 
 [State 106, 4]
 type = ChangeState
@@ -2456,18 +2420,6 @@ Value = 0
 Persistent = 0
 
 [State -1]
-Type = OffSet
-Trigger1 = sysvar(1) >= 0
-X = 1
-Persistent = 4
-
-[State -1]
-Type = OffSet
-Trigger1 = sysvar(1) >= 2
-X = -1
-Persistent = 4
-
-[State -1]
 Type = ChangeAnim
 TriggerAll = SelfAnimExist(5030)
 Trigger1 = 1
@@ -2500,7 +2452,7 @@ Edge = 0,-Const(Size.Air.Back)
 
 [State -1] 
 Type = VelSet
-Trigger1 = sysvar(1) = 0
+Trigger1 = !Time
 X = -11
 
 [State -1]
@@ -2532,26 +2484,26 @@ Value = 5050
 
 [State -1]
 Type = ScreenBound
-Trigger1 = sysvar(1) <= 25
+Trigger1 = time <= 25
 Value = 1
 MoveCamera = 1,1
 
 [State -1]
 Type = ScreenBound
-Trigger1 = sysvar(1) > 25
+Trigger1 = time > 25
 Value = 1
 MoveCamera = 0,1
 
 [State -1]
 Type = ChangeState
-TriggerAll = sysvar(1) = [0,11]
+TriggerAll = time = [0,11]
 TriggerAll = BackEdgeDist <= 0
 Trigger1 = 1
 Value = 5117
 
 [State -1]
 Type = ChangeState
-TriggerAll = sysvar(1) >= 12
+TriggerAll = time >= 12
 TriggerAll = BackEdgeDist <= 0
 Trigger1 = 1
 Value = 5118
@@ -2628,6 +2580,11 @@ Y = -7
 Type = VelAdd
 Trigger1 = Time >= 8
 Y = .5
+
+[State -1]
+Type = varset
+Trigger1 = 1
+sysvar(1) = 0
 
 [State -1]
 Type = SelfState
@@ -2710,3 +2667,16 @@ Persistent = 0
 Type = SelfState
 Trigger1 = (Vel Y > 0) && (Pos Y >= 0)
 Value = 5100
+
+;---------------------------------------------------------------------------
+;
+; ETC イントロとか何やら
+;
+;---------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////
+[Statedef 180]
+type = U
+
+[State ]
+type = Null
+trigger1 = 1

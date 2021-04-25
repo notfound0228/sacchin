@@ -5,6 +5,894 @@
 ;
 ;---------------------------------------------------------------------------
 ;///////////////////////////////////////////////////////////////////////////
+
+;///////////////////////////////////////////////////////////////////////////
+;---------------------------------------------------------------------------
+;	5A
+;---------------------------------------------------------------------------
+
+[StateDef 200]
+type = S
+MoveType = A
+physics = S
+ctrl = 0
+
+[State 200, A連打判断用Explod]
+type = Explod
+triggerall = Anim = 200
+triggerall = AnimElemTime(7) > 0
+trigger1 = command = "a"
+trigger1 = command != "holddown"
+ID = 200
+anim = 0
+RemoveTime = 1
+RemoveOnGetHit = 1
+Scale = 0,0
+SuperMovetime = 2147483646
+PauseMoveTime = 2147483646
+ignorehitpause = 1
+
+[State 200, A連打の初動でMoveContact系をリセット]
+type = MoveHitReset
+trigger1 = NumExplod(200)
+ignorehitpause = 1
+
+[State 200, アニメ変更]
+type = ChangeAnim
+trigger1 = Anim != 200
+trigger2 = NumExplod(200)
+;  A連打判定が出たら変える
+value = 200
+ignorehitpause = 1
+
+[State 200, 腕振り音]
+type = Playsnd
+trigger1 = AnimElem = 1
+value = s0,1
+
+[State 200, 攻撃]
+type = HitDef
+triggerall = MoveContact = 0
+trigger1 = AnimElemTime(2)>0
+trigger1 = AnimElemTime(6)<12
+attr = S, NA
+damage = 10, 2
+AnimType = Light
+GuardFlag = M
+HitFlag = MAFD
+Priority = 3, Hit
+PauseTime = 6,6
+Guard.PauseTime = 6,6
+GetPower = 10
+GivePower = 10,5
+Guard.SparkNo = S4100
+SparkNo = S4100+(Random%2)
+SparkXY = -8, -63
+HitSound = s0, 15
+GuardSound = S0, 30
+Ground.Type = High
+Ground.SlideTime = Abs(AnimTime)
+Ground.HitTime = Abs(AnimTime)
+Guard.Slidetime = 20
+Guard.Ctrltime = 20
+Ground.Velocity = -4.3
+guard.velocity = -5
+Guard.CornerPush.VelOff = -3.3
+AirGuard.CornerPush.VelOff = -3.5
+Air.Velocity = -2,-3.5
+Air.Fall = 1
+Fall.RecoverTime = 30
+persistent = 256
+
+[State 200]
+type = SelfState
+trigger1 = !AnimTime
+value = 0
+ctrl = 1
+
+;---------------------------------------------------------------------------
+;	5B
+;---------------------------------------------------------------------------
+
+[StateDef 210]
+type = S
+MoveType = A
+physics = S
+ctrl = 0
+
+[State 210, アニメ変更]
+type = ChangeAnim
+trigger1 = Anim != StateNo
+value = StateNo
+ignorehitpause = 1
+
+[State 210, 初動微妙に動くためのやつ]
+type = posadd
+trigger1 = AnimElem = 3
+trigger1 = Pos Y - EnemyNear,Pos Y = 0
+trigger1 = Abs( Pos X - EnemyNear,Pos X ) > 42;すり抜けるほど近いならさせない
+x = 42
+
+[State 210, 腕振った瞬間に加速]
+type = VelSet
+trigger1 = AnimElem = 4
+x = 12
+
+[State 210, 腕振り音]
+type = Playsnd
+trigger1 = AnimElem = 4
+value = s0,2
+
+[State 210, 風切り音]
+type = PlaySnd
+trigger1 = MoveHit = 1
+value = s0,38
+ignorehitpause = 1
+
+[State 230, 攻撃]
+type = HitDef
+triggerall = MoveContact = 0
+trigger1 = AnimElemTime(5)>0
+trigger1 = AnimElemTime(7)<2
+attr = S, NA
+damage = 35, 5
+AnimType = Light
+GuardFlag = M
+HitFlag = MAFD
+Priority = 3, Hit
+PauseTime = 0,6
+Guard.PauseTime = 6,6
+GetPower = 10
+GivePower = 10,5
+Guard.SparkNo = S4100
+SparkNo = S4102+(Random%2)
+SparkXY = -8, -63
+HitSound = s0, 20
+GuardSound = S0, 30
+Ground.Type = High
+Ground.SlideTime = 30
+Ground.HitTime = 30
+Guard.Slidetime = 60
+Guard.Ctrltime = 60
+Ground.Velocity = -8,0
+guard.velocity = -5
+Guard.CornerPush.VelOff = -3.3
+AirGuard.CornerPush.VelOff = -3.5
+Air.Velocity = -3,-6
+Fall = 0
+Air.Fall = 1
+Fall.Recover = 0
+EnvShake.Time = 6
+EnvShake.Freq = 12
+EnvShake.Ampl = 24
+EnvShake.Phase = 36
+
+[State 210, エフェクトヘルパー]
+type = Helper
+triggerall = Anim = 210
+trigger1 = AnimElemTime(5) = 0
+ID = 4146
+StateNo = 4133
+name = "Explod_Helper"
+helpertype = Player
+keyctrl = 0
+ownpal = 1
+Size.XScale = 1.5
+Size.YScale = 1.5
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
+ignorehitpause = 1
+
+[State 210, エフェクトヘルパー]
+type = Helper
+triggerall = Anim = 210
+trigger1 = AnimElemTime(5) = 0
+ID = 4133
+StateNo = 4133
+name = "Explod_Helper"
+helpertype = Player
+keyctrl = 0
+ownpal = 1
+Size.XScale = 1.5
+Size.YScale = 1.5
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
+ignorehitpause = 1
+
+[State 310, エフェクト]
+type = Explod
+triggerall = Anim = 210
+trigger1 = MoveHit = 1
+ID = 4134
+anim = 4134
+postype = p1
+pos = 33,-70
+bindtime = -1
+Facing = -1
+SprPriority = 4
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
+RemoveOnGetHit = 1
+ignorehitpause = 1
+
+[State 200]
+type = SelfState
+trigger1 = !AnimTime
+value = 0
+ctrl = 1
+
+[Statedef 4133]
+type = S
+movetype = I
+physics = N
+SprPriority = 4
+movehitpersist = 1
+hitdefpersist = 1
+
+[State 6007, 2]
+type = SprPriority
+trigger1 = 1
+value = 5
+persistent = 256
+ignorehitpause = 1
+
+[State 6007, 2]
+type = PlayerPush
+trigger1 = 1
+value = 0
+ignorehitpause = 1
+
+[State 6007, 2]
+type = BindToRoot
+trigger1 = Root,Anim = 210
+time = 1
+ignorehitpause = 1
+
+[State 6007, 2]
+type = AngleDraw
+trigger1 = 1
+value = -43
+persistent = 256
+ignorehitpause = 1
+
+[State 6007, 1]
+type = ChangeAnim
+triggerall = IsHelper(4133)
+trigger1 = Anim != 4133
+value = 4133
+ignorehitpause = 1
+
+[State 6007, 1]
+type = ChangeAnim
+triggerall = IsHelper(4146)
+trigger1 = Anim != 4146
+value = 4146
+ignorehitpause = 1
+
+[State 6007, 2]
+type = Trans
+trigger1 = IsHelper(4133)
+trans = add
+persistent = 256
+ignorehitpause = 1
+
+[State 6007, 2]
+type = Trans
+trigger1 = IsHelper(4146)
+trans = sub
+persistent = 256
+ignorehitpause = 1
+
+[State 200]
+type = SelfState
+trigger1 = !AnimTime
+value = 2147483646
+ignorehitpause = 1
+
+[State 200]
+type = SelfState
+trigger1 = 1
+value = ifelse( MoveType=I ,5150 ,120 )
+ctrl = 0
+ignorehitpause = 1
+
+;---------------------------------------------------------------------------
+;	5C
+;---------------------------------------------------------------------------
+
+[StateDef 230]
+type = S
+MoveType = A
+physics = S
+ctrl = 0
+
+[State 230, アニメ変更]
+type = ChangeAnim
+trigger1 = Anim != 230
+value = 230
+ignorehitpause = 1
+
+[State 230, 腕振り音]
+type = Playsnd
+trigger1 = AnimElem = 5
+value = s0,3
+
+[State 230, 腕振る時加速]
+type = VelSet
+trigger1 = AnimElem = 5
+x = 12
+
+[State 230, ヒット時追加音]
+type = PlaySnd
+trigger1 = AnimElemtime(5) >= 0
+trigger1 = MoveHit = 1
+value = s0,38
+ignorehitpause = 1
+
+[State 310, エフェクト]
+type = Explod
+triggerall = Anim = 230
+trigger1 = AnimElemTime(4) = 0
+ID = 4108
+anim = 4108
+postype = p1
+pos = 0,0
+bindtime = -1
+Scale = 1.5,1.3
+SprPriority = 4
+RemoveOnGetHit = 1
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
+ignorehitpause = 1
+
+[State 310, エフェクト]
+type = Explod
+triggerall = Anim = 230
+trigger1 = AnimElemTime(4) = 0
+ID = 4144
+anim = 4144
+postype = p1
+pos = 0,0
+bindtime = -1
+SprPriority = 5
+Scale = 1.5,1.3
+RemoveOnGetHit = 1
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
+ignorehitpause = 1
+
+[State 230, 攻撃]
+type = HitDef
+triggerall = MoveContact = 0
+trigger1 = AnimElemTime(5)>0
+trigger1 = AnimElemTime(7)<12
+attr = S, NA
+damage = 100, 10
+AnimType = Light
+GuardFlag = M
+HitFlag = MAFD
+Priority = 3, Hit
+PauseTime = 0,6
+Guard.PauseTime = 6,6
+GetPower = 10
+GivePower = 10,5
+Guard.SparkNo = S4100
+SparkNo = S4102+(Random%2)
+SparkXY = -8, -63
+HitSound = s0, 21
+GuardSound = S0, 30
+Ground.Type = High
+Ground.SlideTime = 2147483647
+Ground.HitTime = 2147483647
+Guard.Slidetime = 20
+Guard.Ctrltime = 20
+Ground.Velocity = -1000,-12
+guard.velocity = -5
+Guard.CornerPush.VelOff = -3.3
+AirGuard.CornerPush.VelOff = -3.5
+Air.Velocity = -1000,-6
+Fall = 1
+Air.Fall = 1
+Fall.Recover = 0
+EnvShake.Time = 6
+EnvShake.Freq = 12
+EnvShake.Ampl = 24
+EnvShake.Phase = 36
+
+[State 230]
+type = SelfState
+trigger1 = !AnimTime
+value = 0
+ctrl = 1
+
+;---------------------------------------------------------------------------
+;	2A
+;---------------------------------------------------------------------------
+
+[StateDef 300]
+type = C
+MoveType = A
+physics = C
+ctrl = 0
+
+[State 300, A連打判断用Explod]
+type = Explod
+triggerall = Anim = 300
+triggerall = AnimElemTime(6) > 0
+trigger1 = command = "a"
+trigger1 = command = "holddown"
+ID = 300
+anim = 0
+RemoveTime = 1
+RemoveOnGetHit = 1
+Scale = 0,0
+SuperMovetime = 2147483646
+PauseMoveTime = 2147483646
+ignorehitpause = 1
+
+[State 300, A連打の初動でMoveContact系をリセット]
+type = MoveHitReset
+trigger1 = NumExplod(300)
+ignorehitpause = 1
+
+[State 300, アニメ変更]
+type = ChangeAnim
+trigger1 = Anim != StateNo
+trigger2 = NumExplod(300)
+;  A連打判定が出たら変える
+value = StateNo
+ignorehitpause = 1
+
+[State 300, 腕振り音]
+type = Playsnd
+trigger1 = AnimElem = 3
+value = s0,1
+
+[State 300, 初動加速]
+type = VelSet
+trigger1 = AnimElem = 3
+x = 2
+
+[State 300, 攻撃]
+type = HitDef
+triggerall = MoveContact = 0
+trigger1 = AnimElemTime(3)>0
+trigger1 = AnimElemTime(5)<2
+attr = S, NA
+damage = 20, 5
+AnimType = Light
+GuardFlag = M
+HitFlag = MAFD
+Priority = 3, Hit
+PauseTime = 0,6
+Guard.PauseTime = 6,6
+GetPower = 10
+GivePower = 10,5
+Guard.SparkNo = S4100
+SparkNo = S4100+(Random%2)
+SparkXY = -8, -63
+HitSound = s0, 15
+GuardSound = S0, 30
+Ground.Type = High
+Ground.SlideTime = 12
+Ground.HitTime = 12
+Guard.Slidetime = 20
+Guard.Ctrltime = 20
+Ground.Velocity = -3,0
+guard.velocity = -5
+Guard.CornerPush.VelOff = -3.3
+AirGuard.CornerPush.VelOff = -3.5
+Air.Velocity = -1.5,-3
+Air.Fall = 1
+Fall.Recover = 0
+EnvShake.Time = 2
+EnvShake.Freq = 4
+EnvShake.Ampl = 6
+EnvShake.Phase = 8
+
+[State 300]
+type = SelfState
+trigger1 = !AnimTime
+value = 11
+ctrl = 1
+
+
+;---------------------------------------------------------------------------
+;	2B
+;---------------------------------------------------------------------------
+
+[StateDef 310]
+type = C
+MoveType = A
+physics = C
+ctrl = 0
+
+[State 310, アニメ変更]
+type = ChangeAnim
+trigger1 = Anim != StateNo
+value = StateNo
+ignorehitpause = 1
+
+[State 310, 腕振り音]
+type = Playsnd
+trigger1 = AnimElem = 4
+value = s0,1
+
+[State 310, 加速]
+type = VelSet
+trigger1 = AnimElem = 4
+x = 4
+
+[State 310, エフェクト]
+type = Explod
+triggerall = Anim = 310
+trigger1 = AnimElemTime(4) = 0
+ID = 300
+anim = 4117
+postype = p1
+pos = 28,31
+bindtime = -1
+SprPriority = 4
+RemoveOnGetHit = 1
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
+ignorehitpause = 1
+
+[State 310, エフェクト]
+type = Explod
+triggerall = Anim = 310
+trigger1 = AnimElemTime(4) = 0
+ID = 300
+anim = 4149
+postype = p1
+pos = 28,31
+bindtime = -1
+SprPriority = 4
+RemoveOnGetHit = 1
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
+ignorehitpause = 1
+
+[State 310, 攻撃]
+type = HitDef
+triggerall = MoveContact = 0
+trigger1 = AnimElemTime(4)>0
+trigger1 = AnimElemTime(7)<12
+attr = S, NA
+damage = 100, 25
+AnimType = Light
+GuardFlag = M
+HitFlag = MAFD
+Priority = 3, Hit
+PauseTime = 0,6
+Guard.PauseTime = 6,6
+GetPower = 10
+GivePower = 10,5
+Guard.SparkNo = S4100
+SparkNo = S4100+(Random%2)
+SparkXY = -8, -63
+HitSound = s0, 22
+GuardSound = S0, 30
+Ground.Type = High
+Ground.SlideTime = 2147483647
+Ground.HitTime = 2147483647
+Guard.Slidetime = 20
+Guard.Ctrltime = 20
+Ground.Velocity = -3,0
+guard.velocity = -1
+Guard.CornerPush.VelOff = -3.3
+AirGuard.CornerPush.VelOff = -3.5
+Air.Velocity = -3,-4
+Fall = 1
+Air.Fall = 1
+Fall.Recover = 0
+EnvShake.Time = 3
+EnvShake.Freq = 6
+EnvShake.Ampl = 9
+EnvShake.Phase = 12
+
+[State 310]
+type = SelfState
+trigger1 = !AnimTime
+value = 11
+ctrl = 1
+
+
+;---------------------------------------------------------------------------
+;	2C
+;---------------------------------------------------------------------------
+
+[StateDef 320]
+type = C
+MoveType = A
+physics = C
+ctrl = 0
+
+[State 310, アニメ変更]
+type = ChangeAnim
+trigger1 = Anim != StateNo
+value = StateNo
+ignorehitpause = 1
+
+[State 230, 腕振り音]
+type = Playsnd
+trigger1 = AnimElem = 4
+value = s0,3
+
+[State 230, 壁たたき音]
+type = Playsnd
+trigger1 = AnimElem = 4
+value = s0,29
+
+[State 230, ヒット時追加音]
+type = PlaySnd
+trigger1 = AnimElemtime(4) > 0
+trigger1 = MoveHit = 1
+value = s0,38
+ignorehitpause = 1
+
+[State 310, エフェクト]
+type = Explod
+triggerall = Anim = StateNo
+trigger1 = AnimElemTime(4) = 0
+ID = 4116
+anim = 4116
+postype = p1
+pos = 0,0
+SprPriority = 4
+bindtime = 1
+RemoveOnGetHit = 1
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
+ignorehitpause = 1
+
+[State 310, エフェクト]
+type = Explod
+triggerall = Anim = StateNo
+trigger1 = AnimElemTime(4) = 0
+ID = 4147
+anim = 4147
+postype = p1
+pos = 0,0
+SprPriority = 4
+bindtime = 1
+RemoveOnGetHit = 1
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
+ignorehitpause = 1
+
+[State 300, 攻撃]
+type = HitDef
+triggerall = MoveContact = 0
+trigger1 = AnimElemTime(4)>0
+trigger1 = AnimElemTime(7)<12
+attr = S, NA
+damage = 200, 25
+fall.damage = 50
+AnimType = Light
+GuardFlag = M
+HitFlag = MAFD
+Priority = 3, Hit
+PauseTime = 0,0
+Guard.PauseTime = 6,6
+GetPower = 10
+GivePower = 10,5
+Guard.SparkNo = S4100
+SparkNo = S4100+(Random%2)
+SparkXY = -8, -63
+HitSound = s0, 21
+GuardSound = S0, 30
+Ground.Type = High
+Ground.SlideTime = 2147483647
+Ground.HitTime = 2147483647
+Guard.Slidetime = 20
+Guard.Ctrltime = 20
+Ground.Velocity = -9,-25
+guard.velocity = -5
+Guard.CornerPush.VelOff = -3.3
+AirGuard.CornerPush.VelOff = -3.5
+Air.Velocity = -7,25
+Fall = 1
+Air.Fall = 1
+Fall.Recover = 0
+EnvShake.Time = 6
+EnvShake.Freq = 12
+EnvShake.Ampl = 24
+EnvShake.Phase = 36
+
+[State 300]
+type = SelfState
+trigger1 = !AnimTime
+value = 11
+ctrl = 1
+
+
+
+
+
+;-------------------------------------------------------------------------------------------------
+;--------------------------------------------------------------------------------------------------
+;━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+;  <ヘルパー> ヘルパー消去ステート
+;━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+;-------------------------------------------------------------------------------------------------
+;この消去ステートはExplod消去召喚エラーを起こさないように削除するための安全装置的な削除ステートです。
+
+
+[StateDef 2147483646]
+
+[State 2147483646,ヘルパーを消す前にExplodを消去]
+type = RemoveExplod
+trigger1 = IsHelper
+ignorehitpause = 1
+
+[State 2147483646, 一度巡回させる(消去召喚回避)]
+type = ChangeState
+trigger1 = PrevStateNo != StateNo
+value = StateNo
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
+
+[State 2147483646, ヘルパー消去]
+type = DestroySelf
+trigger1 = IsHelper
+trigger1 = !NumExplod
+ignorehitpause = 1
+
+;-------------------------------------------------------------------------------------------------
 ;22A当身始動
 ;///////////////////////////////////////////////////////////////////////////
 [Statedef 4000]
@@ -34,7 +922,7 @@ type = ReversalDef
 trigger1 = !IsHelper
 reversal.attr = SCA,AA,AT,AP
 pausetime = 0,0
-ID = 4000
+ID = 4100
 ignorehitpause = 1
 
 [State 4000, ]
@@ -75,8 +963,8 @@ HitFlag = MAF
 priority = 1, Miss
 sparkno = -1
 p2facing = 1
-p1stateno = 4002
-p2stateno = 4007
+p1StateNo = 4002
+p2StateNo = 4007
 fall = 1
 
 [State 4000, 腕振り音]
@@ -112,8 +1000,8 @@ anim = 0
 RemoveTime = 1
 RemoveOnGetHit = 1
 Scale = 0,0
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 ignorehitpause = 1
 
 [State 4000, 腕振り音]
@@ -175,8 +1063,8 @@ ignorehitpause = 1
 type = Explod
 trigger1 = AnimElemTime(8) = 0
 trigger2 = AnimElemTime(15) = 0
-ID = 6011
-anim = 6011
+ID = 4111
+Anim = 4111
 postype = p1
 pos = ifelse( Anim=4002 ,20 ,-20 ),0
 bindtime = -1
@@ -194,15 +1082,15 @@ ignorehitpause = 1
 [State 4000, 打撃エフェクト]
 type = Explod
 trigger1 = AnimElemTime(15) = 0
-ID = 6000
-anim = 6003+Random%2
+ID = 4100
+Anim = 4103+Random%2
 postype = p2
 pos = 0,0
 bindtime = -1
 SprPriority = 4
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 ignorehitpause = 1
 
 [State 4000, 腕振り音]
@@ -376,7 +1264,7 @@ ignorehitpause = 1
 [State 4000, 埃エフェクト]
 type = Explod
 trigger1 = AnimElemTime(2) = 10
-ID = 6009
+ID = 4109
 anim = ifelse( (42-var(1)=[37,47]) ,6011 ,6009 )
 postype = p1
 pos = 0,0
@@ -393,8 +1281,8 @@ HitFlag = AFD
 priority = 1, Miss
 sparkno = -1
 p2facing = 1
-p1stateno = 4005
-p2stateno = 4007
+p1StateNo = 4105
+p2StateNo = 4007
 fall = 1
 persistent = 256
 
@@ -440,8 +1328,8 @@ anim = 0
 RemoveTime = 1
 RemoveOnGetHit = 1
 Scale = 0,0
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 ignorehitpause = 1
 
 [State 4000, Target追従 前投げ]
@@ -505,15 +1393,15 @@ Y = -5
 [State 4000, 打撃エフェクト]
 type = Explod
 trigger1 = AnimElemTime(3) = 0
-ID = 6000
-anim = 6000+(Random%2)
+ID = 4100
+Anim = 4100+(Random%2)
 postype = p2
 pos = 0,0
 bindtime = 1
 SprPriority = 4
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 ignorehitpause = 1
 
 [State 4005, 後ろ投げ用相手固定]
@@ -774,6 +1662,12 @@ trigger1 = Anim = 4007
 x = 0.5
 ignorehitpause = 1
 
+[State 4007 ,ダウン時Y軸加速リセット]
+type = VelMul
+trigger1 = Anim = 4007
+x = 0.5
+ignorehitpause = 1
+
 ;/////////////////////////////////////
 ;  ここから22C空中処理
 ;/////////////////////////////////////
@@ -782,7 +1676,7 @@ ignorehitpause = 1
 Type = PalFx
 trigger1 = Enemy(Enemy,Name!="Sacchin"),StateNo = 4023
 trigger1 = Enemy(Enemy,Name!="Sacchin"),AnimElemTime(4) < 0
-trigger2 = Enemy(Enemy,Name!="Sacchin"),StateNo = 4022
+trigger2 = Enemy(Enemy,Name!="Sacchin"),StateNo = 4122
 Add = -255,-255,-255
 Time = 1
 persistent = 256
@@ -826,7 +1720,7 @@ ignorehitpause = 1
 Type = ChangeAnim2
 trigger1 = Enemy(Enemy,Name!="Sacchin"),StateNo = 4023
 trigger1 = Enemy(Enemy,Name!="Sacchin"),AnimElemTime(2) < 0
-trigger2 = Enemy(Enemy,Name!="Sacchin"),StateNo = 4022
+trigger2 = Enemy(Enemy,Name!="Sacchin"),StateNo = 4122
 Value = 4024
 elem = 1
 ignorehitpause = 1
@@ -924,9 +1818,9 @@ type = Helper
 trigger1 = !IsHelper
 trigger1 = PrevStateNo = 4010
 trigger1 = AnimElemTime(2) = 0
-trigger1 = !NumHelper(6064)
-StateNo = 6064
-ID = 6064
+trigger1 = !NumHelper(4164)
+StateNo = 4164
+ID = 4164
 name = "Explod_Helper"
 helpertype = Player
 keyctrl = 0
@@ -938,9 +1832,9 @@ ignorehitpause = 1
 [State 4000, びっくりエフェクト]
 type = Explod
 triggerall = AnimElemTime(1) = 0
-trigger1 = !NumExplod(6063)
-ID = 6063
-anim = 6063
+trigger1 = !NumExplod(4163)
+ID = 4163
+Anim = 4163
 postype = p1
 pos = 0,-60
 bindtime = 1
@@ -997,7 +1891,7 @@ trigger1 = !AnimTime
 value = 0
 ctrl = 1
 
-[Statedef 6064]
+[Statedef 4164]
 type = S
 movetype = A
 physics = N
@@ -1012,13 +1906,13 @@ ignorehitpause = 1
 
 [State 6027, カラー毎に眼の色に合うように変更]
 type = ChangeAnim
-trigger1 = Anim != 6064
-value = 6064
+trigger1 = Anim != 4164
+value = 4164
 ignorehitpause = 1
 
 [State 4010, ナイフの飛ぶ音]
 type = PlaySnd
-trigger1 = !IsHelper
+trigger1 = IsHelper
 trigger1 = AnimElemTime(2) = 0
 value = s0,65
 ignorehitpause = 1
@@ -1038,8 +1932,8 @@ PauseTime = 0,60
 Guard.PauseTime = 0,60
 GetPower = 10
 GivePower = 10,5
-Guard.SparkNo = S6000
-SparkNo = S6000+(Random%2)
+Guard.SparkNo = S4100
+SparkNo = S4100+(Random%2)
 SparkXY = 0, -40
 HitSound = s0, 22
 GuardSound = S0, 30
@@ -1091,7 +1985,7 @@ type = ReversalDef
 trigger1 = !IsHelper
 reversal.attr = SCA,AA,AT,AP
 pausetime = 0,0
-ID = 4010
+ID = 4110
 ignorehitpause = 1
 
 [State 4010, 8席ヘルパーで埋まってしまったら捨てる]
@@ -1137,8 +2031,8 @@ elem = 1 + 2*(PrevStateNo=4020)
 type = Explod
 trigger1 = NumTarget(4020)
 trigger1 = AnimElem = 3
-Anim = 6061
-id = 6061
+Anim = 4161
+ID = 4161
 pos = 0,ceil(-105*const(size.yscale))
 postype = P1
 ownpal = 1
@@ -1152,10 +2046,10 @@ PauseMoveTime = 2147483646
 [State 230, 時止め管理ヘルパー]
 type = Helper
 triggerall = NumExplod(6061)
-triggerall = !NumHelper(6062)
+triggerall = !NumHelper(4162)
 trigger1 = AnimElem = 3
-ID = 6062
-StateNo = 6062
+ID = 4162
+StateNo = 4162
 name = "Explod_Helper"
 helpertype = Player
 keyctrl = 0
@@ -1169,7 +2063,7 @@ ignorehitpause = 1
 type = ModifyExplod
 triggerall = NumExplod(6061)
 trigger1 = fvar(0) := fvar(0) + 0.2
-Id = 6061
+ID = 4161
 scale = fvar(0),fvar(0)
 ignorehitpause = 1
 
@@ -1218,17 +2112,17 @@ p2facing = 1
 fall = 0
 fall.recover = 0
 yaccel = .55
-ID = 4011
+ID = 4111
 kill = 0
 getpower = 0
 givepower = 15,15
-p2stateno = 4017
+p2StateNo = 4017
 
 [State 4000, 砂塵エフェクト1]
 type = Explod
 trigger1 = AnimElemTime(3) = 0
-ID = 6022
-anim = 6022
+ID = 4122
+Anim = 4122
 postype = p1
 pos = 0,0
 bindtime = 1
@@ -1239,8 +2133,8 @@ ignorehitpause = 1
 [State 4000, 砂塵エフェクト2]
 type = Explod
 trigger1 = AnimElemTime(3) = 0
-ID = 6023
-anim = 6023
+ID = 4123
+Anim = 4123
 postype = p1
 pos = -40,0
 bindtime = -1
@@ -1269,7 +2163,7 @@ trigger1 = 1 || fvar(0) := 0
 value = 101
 ctrl = 0
 
-[Statedef 6062]
+[Statedef 4162]
 type = S
 movetype = I
 physics = N
@@ -1284,8 +2178,8 @@ ignorehitpause = 1
 
 [State 6027, カラー毎に眼の色に合うように変更]
 type = ChangeAnim
-trigger1 = Anim != 6062
-value = 6062
+trigger1 = Anim != 4162
+value = 4162
 ignorehitpause = 1
 
 [State 6027, カラー毎に眼の色に合うように変更]
@@ -1351,8 +2245,8 @@ x = 0.5
 [State 4012, 砂塵エフェクト]
 type = Explod
 trigger1 = AnimElemTime(3) = 0
-ID = 6023
-anim = 6023
+ID = 4123
+Anim = 4123
 postype = p1
 pos = 40,0
 bindtime = -1
@@ -1372,15 +2266,15 @@ trigger1 = AnimElemTime(5) = 0
 [State 4012, 打撃エフェクト]
 type = Explod
 trigger1 = AnimElemTime(5) = 1
-ID = 6024
-anim = 6024
+ID = 4124
+Anim = 4124
 postype = p1
 pos = 40,0
 bindtime = -1
 SprPriority = 4
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 ignorehitpause = 1
 
 [State 4012, 腕振り音]
@@ -1420,8 +2314,8 @@ PauseTime = 0,3
 Guard.PauseTime = 0,3
 GetPower = 10
 GivePower = 10,5
-Guard.SparkNo = S6000
-SparkNo = S6000+(Random%2)
+Guard.SparkNo = S4100
+SparkNo = S4100+(Random%2)
 SparkXY = -8, -63
 HitSound = s0, 19
 GuardSound = S0, 30
@@ -1565,13 +2459,13 @@ kill = 1
 type = Explod
 trigger1 = Anim = 4015
 trigger1 = Animelem = 2
-anim = 6000+Random%2
+Anim = 4100+Random%2
 pos = 0,-60
 postype = p2
 sprpriority = 7
 ownpal = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 
 [State 1211, targetstate]
 type = targetstate
@@ -1579,7 +2473,7 @@ trigger1 = Anim = 4015
 trigger1 = NumTarget(4011)
 trigger1 = Animelem = 5
 value = 4019
-ID = 4011
+ID = 4111
 
 [State 1211, vel]
 type = VelSet
@@ -1640,7 +2534,7 @@ ignorehitpause = 1
 
 [State 1210, targetbind]
 type = PosSet
-trigger1 = Enemy(Enemy,Name!="Sacchin"),StateNo = 4014
+trigger1 = Enemy(Enemy,Name!="Sacchin"),StateNo = 4114
 x = (EnemyNear,Pos X) + ifelse( Enemy(Enemy,Name!="Sacchin"),Facing=1 ,10 , -10 )
 y = (EnemyNear,Pos Y) - 60
 ;	bindだと落下時にVelが入ってるのに降下しない不具合が出たので
@@ -1701,7 +2595,7 @@ edge = 0,-100
 
 [State 1210, targetbind]
 type = PosSet
-trigger1 = Enemy(Enemy,Name!="Sacchin"),StateNo = 4015
+trigger1 = Enemy(Enemy,Name!="Sacchin"),StateNo = 4115
 x = (EnemyNear,Pos X) + ifelse( Enemy(Enemy,Name!="Sacchin"),Facing=1 ,50 , -50 )
 y = (EnemyNear,Pos Y) - 60
 ;	bindだと落下時にVelが入ってるのに降下しない不具合が出たので
@@ -1770,6 +2664,12 @@ type = ChangeAnim
 trigger1 = Anim != StateNo
 value = StateNo
 
+[State 4020, 本体のターゲット取得をしていたら変数セット]
+type = null
+trigger1 = NumTarget
+trigger1 = !Target,IsHelper
+trigger1 = var(0) := 1
+
 [State 4000, 当身成功時移動 - 対空相手]
 type = SelfState
 triggerall = var(0) = 1
@@ -1803,7 +2703,7 @@ type = ReversalDef
 trigger1 = !IsHelper
 reversal.attr = SCA,AA,AT,AP
 pausetime = 0,20
-ID = 4020
+ID = 4120
 ignorehitpause = 1
 
 [State 4020, ]
@@ -1853,8 +2753,8 @@ ignorehitpause = 1
 [State 230, 眼光エフェクトヘルパー]
 type = Helper
 trigger1 = AnimElem = 1
-ID = 6027
-StateNo = 6027
+ID = 4127
+StateNo = 4127
 name = "Explod_Helper"
 helpertype = Player
 keyctrl = 0
@@ -1869,8 +2769,8 @@ ignorehitpause = 1
 [State 4012, 砂塵エフェクト1]
 type = Explod
 trigger1 = AnimElemTime(5) = 0
-ID = 6023
-anim = 6023
+ID = 4123
+Anim = 4123
 postype = p1
 pos = 27,0
 bindtime = -1
@@ -1883,8 +2783,8 @@ ignorehitpause = 1
 [State 4012, 砂塵エフェクト2]
 type = Explod
 trigger1 = AnimElemTime(2) = 0
-ID = 6022
-anim = 6022
+ID = 4122
+Anim = 4122
 postype = p1
 pos = 0,0
 bindtime = 1
@@ -1897,15 +2797,15 @@ ignorehitpause = 1
 [State 4012, 一閃エフェクト]
 type = Explod
 trigger1 = AnimElemTime(3) = 0
-ID = 6026
-anim = 6026
+ID = 4126
+Anim = 4126
 postype = back
 pos = 0,0
 bindtime = -1
 SprPriority = 4
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 ignorehitpause = 1
 
 [State 4021, 眼光SE]
@@ -1941,15 +2841,15 @@ ignorehitpause = 1
 [State 4012, 血しぶきエフェクト]
 type = Explod
 trigger1 = MoveHit = 1
-ID = 6028
-anim = 6028
+ID = 4128
+Anim = 4128
 postype = p2
 pos = 0,-40
 bindtime = -1
 SprPriority = 4
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 ignorehitpause = 1
 
 [State 4021, 加速]
@@ -1986,8 +2886,8 @@ priority  = 9,hit
 hitflag = MAFDP
 guardflag = 
 pauseTime = 0,0
-guard.sparkno = S6000
-sparkno = S6000+Random%2
+guard.SparkNo = S4100
+SparkNo = S4100+Random%2
 sparkxy = 0,-40
 hitsound   = S5,2
 guardsound = S2,10
@@ -2012,7 +2912,7 @@ trigger1 = !AnimTime
 value = 0
 ctrl = 1
 
-[Statedef 6027]
+[Statedef 4127]
 type = S
 movetype = I
 physics = N
@@ -2034,8 +2934,8 @@ ignorehitpause = 1
 
 [State 6027, カラー毎に眼の色に合うように変更]
 type = ChangeAnim
-trigger1 = Anim != 6027
-value = 6027
+trigger1 = Anim != 4127
+value = 4127
 ignorehitpause = 1
 
 [State 6027, カラー毎に眼の色に合うように変更]
@@ -2094,8 +2994,8 @@ ignorehitpause = 1
 [State 230, 眼光エフェクトヘルパー]
 type = Helper
 trigger1 = AnimElem = 1
-ID = 6027
-StateNo = 6027
+ID = 4127
+StateNo = 4127
 name = "Explod_Helper"
 helpertype = Player
 keyctrl = 0
@@ -2139,7 +3039,7 @@ ignorehitpause = 1
 [State 4000, 埃エフェクト]
 type = Explod
 trigger1 = AnimElemTime(2) = 1
-ID = 6009
+ID = 4109
 anim = ifelse( (42-var(1)=[37,47]) ,6011 ,6009 )
 postype = p1
 pos = 0,0
@@ -2156,8 +3056,8 @@ HitFlag = MA
 priority = 1, Miss
 sparkno = -1
 p2facing = 1
-p1stateno = 4023
-p2stateno = 4007
+p1StateNo = 4023
+p2StateNo = 4007
 fall = 1
 persistent = 256
 
@@ -2206,8 +3106,8 @@ ignorehitpause = 1
 type = Explod
 trigger1 = !IsHelper
 trigger1 = Anim != StateNo
-ID = 6030
-anim = 6030
+ID = 4130
+Anim = 4130
 postype = Back
 ownpal = 1
 pos = 0,0
@@ -2319,29 +3219,29 @@ ignorehitpause = 1
 [State 4012, 血しぶきエフェクト]
 type = Explod
 trigger1 = AnimElem = 2
-ID = 6029
-anim = 6029
+ID = 4129
+Anim = 4129
 postype = p1
 pos = 0,0
 bindtime = 1
 SprPriority = 4
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 ignorehitpause = 1
 
 [State 4012, 血しぶきエフェクト]
 type = Explod
 trigger1 = AnimElem = 2
-ID = 6032
-anim = 6032
+ID = 4132
+Anim = 4132
 postype = p1
 pos = 0,0
 bindtime = 1
 SprPriority = 4
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 ignorehitpause = 1
 
 [State 4000, 腕振り音]
@@ -2460,27 +3360,27 @@ value = s0,46
 [State 210, エフェクト兼攻撃ヘルパー]
 type = Helper
 trigger1 = AnimElem = 4
-ID = 6007
-StateNo = 6007
+ID = 4107
+StateNo = 4107
 name = "Explod_Helper"
 helpertype = Player
 keyctrl = 0
 ownpal = 0
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 ignorehitpause = 1
 
 [State 210, エフェクト兼攻撃ヘルパー]
 type = Helper
 trigger1 = AnimElem = 4
-ID = 6009
-StateNo = 6007
+ID = 4109
+StateNo = 4107
 name = "Explod_Helper"
 helpertype = Player
 keyctrl = 0
 ownpal = 0
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 ignorehitpause = 1
 
 [State 200]
@@ -2489,7 +3389,7 @@ trigger1 = !AnimTime
 value = 0
 ctrl = 1
 
-[Statedef 6007]
+[Statedef 4107]
 type = S
 movetype = A
 physics = N
@@ -2499,13 +3399,13 @@ hitdefpersist = 1
 
 [State 6007, 2]
 type = SprPriority
-trigger1 = IsHelper(6007)
+trigger1 = IsHelper(4107)
 value = 4
 ignorehitpause = 1
 
 [State 6007, 2]
 type = SprPriority
-trigger1 = IsHelper(6009)
+trigger1 = IsHelper(4109)
 value = 5
 ignorehitpause = 1
 
@@ -2523,23 +3423,23 @@ ignorehitpause = 1
 
 [State 6007, 1]
 type = ChangeAnim
-trigger1 = IsHelper(6007)
-trigger1 = Anim != 6007
-value = 6007
+trigger1 = IsHelper(4107)
+trigger1 = Anim != 4107
+value = 4107
 ignorehitpause = 1
 
 [State 6007, 1]
 type = ChangeAnim
-trigger1 = IsHelper(6009)
-trigger1 = NumHelper(6007)
-trigger1 = Anim != 6007
-value = 6045
-elem = Helper(6007),AnimElemNo(0)
+trigger1 = IsHelper(4109)
+trigger1 = NumHelper(4107)
+trigger1 = Anim != 4107
+value = 4145
+elem = Helper(4107),AnimElemNo(0)
 ignorehitpause = 1
 
 [State 200, 1]
 type = HitDef
-triggerall = IsHelper(6007)
+triggerall = IsHelper(4107)
 trigger1 = !MoveContact
 trigger1 = AnimElemTime(10) < 0
 attr = S, NA
@@ -2552,8 +3452,8 @@ PauseTime = 6,6
 Guard.PauseTime = 6,6
 GetPower = 10
 GivePower = 10,5
-Guard.SparkNo = S6000
-SparkNo = S6000+(Random%2)
+Guard.SparkNo = S4100
+SparkNo = S4100+(Random%2)
 SparkXY = -8, -63
 HitSound = s0, 22
 GuardSound = S0, 30
@@ -2573,7 +3473,7 @@ Fall.RecoverTime = 30
 
 [State 200, 1]
 type = HitDef
-triggerall = IsHelper(6007)
+triggerall = IsHelper(4107)
 triggerall = MoveContact
 triggerall = AnimElemTime(10) < 0
 triggerall = var(0) <= 4
@@ -2588,8 +3488,8 @@ PauseTime = 6,6*!(var(0)=5)
 Guard.PauseTime = 6,6
 GetPower = 10
 GivePower = 10,5
-Guard.SparkNo = S6000
-SparkNo = S6000+(Random%2)
+Guard.SparkNo = S4100
+SparkNo = S4100+(Random%2)
 SparkXY = -8, -63
 HitSound = s0, 22
 GuardSound = S0, 30
@@ -2609,7 +3509,7 @@ Fall.RecoverTime = 30
 
 [State 6007, 2]
 type = Trans
-triggerall = IsHelper(6007)
+triggerall = IsHelper(4107)
 trigger1 = 1
 trans = add
 persistent = 256
@@ -2617,7 +3517,7 @@ ignorehitpause = 1
 
 [State 6007, 2]
 type = Trans
-triggerall = IsHelper(6009)
+triggerall = IsHelper(4109)
 trigger1 = 1
 trans = sub
 persistent = 256
@@ -2647,19 +3547,19 @@ ctrl = 0
 
 [State 4035, 差分決定]
 type = Null
-trigger1 = var(1) := 6065
+trigger1 = var(1) := 4165
 ; 無界の石柱
 trigger1 = Random%2 = 0
-trigger1 = var(1) := 6075
+trigger1 = var(1) := 4175
 ; 毛利の矢
 trigger1 = Random%4 = 0
-trigger1 = var(1) := 6035
+trigger1 = var(1) := 4135
 ; 神オロチの髑髏柱
 trigger1 = Random%16 = 0
-trigger1 = var(1) := 6071
+trigger1 = var(1) := 4171
 ; 姫アルクのかぜ
 trigger1 = Random%256 = 0
-trigger1 = var(1) := 6072
+trigger1 = var(1) := 4172
 ; 鬼巫女の賽銭箱
 
 [State 210, アニメ変更]
@@ -2681,8 +3581,8 @@ ignorehitpause = 1
 [State 210, エフェクト兼攻撃ヘルパー]
 type = Helper
 trigger1 = AnimElemTime(1) = 1
-ID = var(1);6035
-StateNo = var(1);6035
+ID = var(1);4035
+StateNo = var(1);4035
 name = "Explod_Helper"
 helpertype = Player
 Postype = P2
@@ -2696,8 +3596,8 @@ type = Helper
 triggerall = AnimElemTime(5) = 0
 triggerall = var(0) = 5
 trigger1 = 1 || var(0) := 0
-ID = var(1);6035
-StateNo = var(1);6035
+ID = var(1);4035
+StateNo = var(1);4035
 name = "Explod_Helper"
 helpertype = Player
 Postype = P2
@@ -2709,9 +3609,9 @@ ignorehitpause = 1
 [State 210, エフェクト兼攻撃ヘルパー - 弓矢用1]
 type = Helper
 trigger1 = AnimElemTime(1) = 1
-trigger1 = var(1) = 6075
-ID = var(1);6035
-StateNo = var(1);6035
+trigger1 = var(1) = 4175
+ID = var(1);4035
+StateNo = var(1);4035
 name = "Explod_Helper"
 helpertype = Player
 Postype = P2
@@ -2724,10 +3624,10 @@ ignorehitpause = 1
 type = Helper
 triggerall = AnimElemTime(5) = 0
 triggerall = var(0) = 5
-triggerall = var(1) = 6075
+triggerall = var(1) = 4175
 trigger1 = 1 || var(0) := 0
-ID = var(1);6035
-StateNo = var(1);6035
+ID = var(1);435
+StateNo = var(1);4035
 name = "Explod_Helper"
 helpertype = Player
 Postype = P2
@@ -2738,10 +3638,10 @@ ignorehitpause = 1
 
 [State 210, エフェクト兼攻撃ヘルパー - 弓矢用3]
 type = Helper
-triggerall = var(1) = 6075
+triggerall = var(1) = 4175
 trigger1 = AnimElemTime(1) = 1
-ID = var(1);6035
-StateNo = var(1);6035
+ID = var(1);4035
+StateNo = var(1);4035
 name = "Explod_Helper"
 helpertype = Player
 Postype = P2
@@ -2752,7 +3652,7 @@ ignorehitpause = 1
 
 [State 210, エフェクト兼攻撃ヘルパー - 弓矢用4]
 type = Helper
-triggerall = var(1) = 6075
+triggerall = var(1) = 4175
 triggerall = AnimElemTime(5) = 0
 triggerall = var(0) = 5
 trigger1 = 1 || var(0) := 0
@@ -2775,7 +3675,7 @@ ctrl = 1
 ;---------------------------------------------------------------------------
 ;	髑髏柱
 
-[Statedef 6035]
+[Statedef 4135]
 type = A
 movetype = A
 physics = N
@@ -2809,8 +3709,8 @@ ignorehitpause = 1
 
 [State 6035, 1]
 type = ChangeAnim
-trigger1 = Anim != 6035
-value = 6035
+trigger1 = Anim != 4135
+value = 4135
 ignorehitpause = 1
 
 [State 210, 腕振り音]
@@ -2846,8 +3746,8 @@ volume = 80
 [State 6035 ,柱]
 type = Explod
 trigger1 = animelem = 12
-anim = 6036
-id = 6036
+Anim = 4136
+ID = 4136
 sprpriority = 3
 postype = p1
 pos = 0,5
@@ -2859,8 +3759,8 @@ under = 0
 [State 6035 ,火柱]
 type = Explod
 trigger1 = animelem = 14
-anim = 6037
-id = 6037
+Anim = 4137
+ID = 4137
 sprpriority = 3
 postype = p1
 pos = 0,0
@@ -2873,7 +3773,7 @@ under = 0
 [State 6035 ,どくろちゃん]
 type = Explod
 trigger1 = animelem = 14
-anim = 6038
+Anim = 4138
 sprpriority = 6
 postype = p1
 pos = 0,-100
@@ -2885,8 +3785,8 @@ under = 0
 [State 6035 ,火柱]
 type = Explod
 trigger1 = animelem = 14
-anim = 6037
-id = 6037
+Anim = 4137
+ID = 4137
 sprpriority = 3
 postype = p1
 pos = 0,30
@@ -2900,8 +3800,8 @@ under = 0
 [State 6035]
 type = Explod
 trigger1 = animelem = 14
-anim = 6037
-id = 6037
+Anim = 4137
+ID = 4137
 sprpriority = 3
 postype = p1
 pos = 0,0
@@ -2915,8 +3815,8 @@ under = 0
 [State 6035]
 type = Explod
 trigger1 = animelem = 14
-anim = 6037
-id = 6037
+Anim = 4137
+ID = 4137
 sprpriority = 2
 postype = p1
 pos = 0,0
@@ -2931,7 +3831,7 @@ under = 0
 type = Explod
 triggerall = AnimElemtime(12) >= 0
 trigger1 = GameTime%2 = 1
-anim = 6039
+Anim = 4139
 sprpriority = 7
 postype = p1
 pos = ifelse(Random%2, Random%56 ,-Random%56 ),-Random%61
@@ -2957,7 +3857,7 @@ givepower = 0,0
 guardflag = H
 hitflag = MAF
 pausetime = 2,4
-sparkno = S6000+(Random%2)
+SparkNo = S4100+(Random%2)
 sparkxy = -7, -70
 hitsound   = s0,52
 guardsound = s0,30
@@ -2969,7 +3869,7 @@ air.velocity = -0.5,-17
 yaccel = .5
 fall = 1
 fall.recover = 0
-p2stateno = 4033
+p2StateNo = 4033
 
 [State 6007, 2]
 type = TargetState
@@ -3002,7 +3902,7 @@ ignorehitpause = 1
 ;---------------------------------------------------------------------------
 ;	石柱
 
-[Statedef 6065]
+[Statedef 4165]
 type = U
 movetype = A
 physics = N
@@ -3012,8 +3912,8 @@ hitdefpersist = 1
 
 [state 6035]
 type = ChangeAnim
-trigger1 = Anim != [6065,6069]
-value = ifelse( Random%128=0, 6068 , ifelse( Random%2 ,6065 ,6066 ) )
+trigger1 = Anim != [4165,4169]
+value = ifelse( Random%128=0, 4168 , ifelse( Random%2 ,4165 ,4166 ) )
 ignorehitpause = 1
 
 [State 6035, 2]
@@ -3024,29 +3924,29 @@ ignorehitpause = 1
 
 [state 6035]
 type = StateTypeSet
-trigger1 = Anim = 6065
-trigger2 = Anim = 6067 || Anim = 6069
+trigger1 = Anim = 4165
+trigger2 = Anim = 4167 || Anim = 4169
 StateType = S
 ignorehitpause = 1
 
 [state 6035]
 type = StateTypeSet
-trigger1 = Anim = 6066
+trigger1 = Anim = 4166
 StateType = A
 ignorehitpause = 1
 
 [state 6035]
 type = PlaySnd
 triggerall = AnimElemTime(1) = 1
-trigger1 = Anim = 6066 || Anim = 6068
+trigger1 = Anim = 4166 || Anim = 4168
 value = s0,71
 ignorehitpause = 1
 
 [state 6035]
 type = PlaySnd
 triggerall = AnimElemTime(1) = 1
-trigger1 = Anim = 6065
-trigger2 = Anim = 6067 || Anim = 6069
+trigger1 = Anim = 4165
+trigger2 = Anim = 4167 || Anim = 4169
 value = s0,66
 volume = 255
 ignorehitpause = 1
@@ -3054,41 +3954,41 @@ ignorehitpause = 1
 [state 6035]
 type = PosSet
 triggerall = AnimElemTime(1) = 0
-trigger1 = Anim = 6065
-trigger2 = Anim = 6066 || Anim = 6068
-Y = ifelse( Anim=6065 ,0 ,-360 )
+trigger1 = Anim = 4165
+trigger2 = Anim = 4166 || Anim = 4168
+Y = ifelse( Anim=4165 ,0 ,-360 )
 ignorehitpause = 1
 
 [state 6035]
 type = VelAdd
-trigger1 = Anim = 6066 || Anim = 6068
+trigger1 = Anim = 4166 || Anim = 4168
 trigger1 = AnimElemTime(1) > 0
 Y = 1.26
 ignorehitpause = 1
 
 [state 6035]
 type = VelSet
-trigger1 = Anim = 6067 || Anim = 6069
+trigger1 = Anim = 4167 || Anim = 4169
 Y = 0
 ignorehitpause = 1
 
 [state 6035]
 type = PosSet
-trigger1 = Anim = 6067 || Anim = 6069
+trigger1 = Anim = 4167 || Anim = 4169
 Y = 0
 ignorehitpause = 1
 
 [state 6035]
 type = ChangeAnim
-trigger1 = Anim = 6066 || Anim = 6068
+trigger1 = Anim = 4166 || Anim = 4168
 trigger1 = Vel Y > 0
 trigger1 = Pos Y >= 0
-value = ifelse( Anim=6066 ,6067 ,6069 )
+value = ifelse( Anim=4166 ,4167 ,4169 )
 ignorehitpause = 1
 
 [State 1011, 石柱ダメージ]
 type = HitDef
-trigger1 = Anim != 6068
+trigger1 = Anim != 4168
 trigger1 = !MoveContact
 attr = S, SP
 numhits = 2
@@ -3097,8 +3997,8 @@ guardflag = MA
 animtype  = diagup
 damage    = 25,5
 pausetime = 0,0
-sparkno = S6000+Random%2
-guard.sparkno = S6084
+SparkNo = S4100+Random%2
+guard.SparkNo = S4184
 sparkxy = -20,ifelse(hitcount = 0, -60,-100)
 hitsound   = S0,15
 guardsound = S0,30
@@ -3116,7 +4016,7 @@ givepower = 10,47
 
 [State 1011, さっちん用ダメージ]
 type = HitDef
-trigger1 = Anim = 6068
+trigger1 = Anim = 4168
 trigger1 = !MoveContact
 attr = S, SP
 numhits = 2
@@ -3126,8 +4026,8 @@ animtype  = diagup
 damage    = 25,150
 fall.damage = 150
 pausetime = 0,0
-sparkno = S6000+Random%2
-guard.sparkno = S6084
+SparkNo = S4100+Random%2
+guard.SparkNo = S4184
 sparkxy = -20,ifelse(hitcount = 0, -60,-100)
 hitsound   = S0,15
 guardsound = S0,30
@@ -3147,9 +4047,9 @@ givepower = 10,47
 [State 6035]
 type = SelfState
 triggerall = !AnimTime
-trigger1 = Anim = 6065
-trigger2 = Anim = 6067
-trigger3 = Anim = 6069
+trigger1 = Anim = 4165
+trigger2 = Anim = 4167
+trigger3 = Anim = 4169
 value = 2147483646
 ignorehitpause = 1
 
@@ -3163,7 +4063,7 @@ ignorehitpause = 1
 ;---------------------------------------------------------------------------
 ;	かぜ
 
-[Statedef 6071]
+[Statedef 4171]
 type = S
 movetype = A
 physics = N
@@ -3219,8 +4119,8 @@ guardflag = MA
 animtype  = diagup
 damage    = 25,5
 pausetime = 0,15
-sparkno = S6000+Random%2
-guard.sparkno = S6084
+SparkNo = S4100+Random%2
+guard.SparkNo = S4184
 sparkxy = -20,ifelse(hitcount = 0, -60,-100)
 hitsound   = S0,22
 guardsound = S0,30
@@ -3252,7 +4152,7 @@ ignorehitpause = 1
 ;---------------------------------------------------------------------------
 ;	賽銭箱
 
-[Statedef 6072]
+[Statedef 4172]
 type = S
 movetype = A
 physics = N
@@ -3262,7 +4162,7 @@ hitdefpersist = 1
 
 [state 6035]
 type = ChangeAnim
-trigger1 = Anim != [6072,6073]
+trigger1 = Anim != [4172,4173]
 value = StateNo
 ignorehitpause = 1
 
@@ -3289,50 +4189,50 @@ ignorehitpause = 1
 
 [state 6035]
 type = PlaySnd
-trigger1 = Anim = 6072
+trigger1 = Anim = 4172
 trigger1 = AnimElemTime(1) = 0
 value = s0,67
 ignorehitpause = 1
 
 [state 6035]
 type = PosSet
-trigger1 = Anim = 6072
+trigger1 = Anim = 4172
 trigger1 = AnimElemTime(1) = 0
 Y = -360
 ignorehitpause = 1
 
 [state 6035]
 type = VelAdd
-trigger1 = Anim = 6072
+trigger1 = Anim = 4172
 trigger1 = AnimElemTime(1) > 0
 Y = 1.56
 ignorehitpause = 1
 
 [state 6035]
 type = VelSet
-trigger1 = Anim = 6073
+trigger1 = Anim = 4173
 Y = 0
 ignorehitpause = 1
 
 [state 6035]
 type = PosSet
-trigger1 = Anim = 6073
+trigger1 = Anim = 4173
 Y = 0
 ignorehitpause = 1
 
 [state 6035]
 type = PlaySnd
-trigger1 = Anim = 6073
+trigger1 = Anim = 4173
 trigger1 = AnimElemTime(1) = 1
 value = s0,29
 ignorehitpause = 1
 
 [state 6035]
 type = ChangeAnim
-trigger1 = Anim = 6072
+trigger1 = Anim = 4172
 trigger1 = Vel Y > 0
 trigger1 = Pos Y >= -48
-value = 6073
+value = 4173
 ignorehitpause = 1
 
 [State 6069]
@@ -3363,8 +4263,8 @@ guardflag =
 animtype  = diagup
 damage    = 2147483647,2147483647
 pausetime = 0,0
-sparkno = S6000+Random%2
-guard.sparkno = S6084
+SparkNo = S4100+Random%2
+guard.SparkNo = S4184
 sparkxy = -20,ifelse(hitcount = 0, -60,-100)
 hitsound   = -1
 guardsound = -1
@@ -3388,10 +4288,10 @@ trigger1 = RoundState = 3
 trigger1 = NumTarget
 trigger1 = Target,Alive = 0
 trigger1 = !NumExplod(6031)
-ID = 6031
+ID = 4131
 PosType = P2
 Pos = 0, (Target,Const(Size.Mid.Pos.Y))
-Anim = 6031
+Anim = 4131
 Ownpal = 1
 SprPriority = 6
 BindTime = -1
@@ -3402,14 +4302,14 @@ ignorehitpause = 1
 
 [state 6035]
 type = PlaySnd
-trigger1 = Anim = 6073
+trigger1 = Anim = 4173
 trigger1 = AnimElemTime(1) = 0
 value = s0,68
 ignorehitpause = 1
 
 [State 6035]
 type = SelfState
-trigger1 = Anim = 6073
+trigger1 = Anim = 4173
 trigger1 = !AnimTime
 value = 2147483646
 ignorehitpause = 1
@@ -3424,7 +4324,7 @@ ignorehitpause = 1
 ;---------------------------------------------------------------------------
 ;	矢
 
-[Statedef 6075]
+[Statedef 4175]
 type = A
 movetype = A
 physics = N
@@ -3434,7 +4334,7 @@ hitdefpersist = 1
 
 [state 6035]
 type = ChangeAnim
-trigger1 = Anim != [6075,6076]
+trigger1 = Anim != [4175,4176]
 value = StateNo
 ignorehitpause = 1
 
@@ -3452,28 +4352,28 @@ ignorehitpause = 1
 
 [state 6035]
 type = PlaySnd
-trigger1 = Anim = 6075
+trigger1 = Anim = 4175
 trigger1 = AnimElemTime(1) = 1
 value = s0,72
 ignorehitpause = 1
 
 [state 6035]
 type = PosSet
-trigger1 = Anim = 6075
+trigger1 = Anim = 4175
 trigger1 = AnimElemTime(1) = 0
 Y = -360
 ignorehitpause = 1
 
 [state 6035]
 type = PosSet
-trigger1 = Anim = 6075
+trigger1 = Anim = 4175
 trigger1 = AnimElemTime(1) = 0
 X = ifelse( Random%2 ,-Random%321 ,Random%321 )
 ignorehitpause = 1
 
 [state 6035]
 type = Turn;Null
-trigger1 = Anim = 6075
+trigger1 = Anim = 4175
 trigger1 = AnimElemTime(1) = 1
 trigger1 = ((Pos X-EnemyNear,Pos X )*ifelse(Facing=1,-1,1)<0);var(3) := ifelse( ((Pos X-EnemyNear,Pos X )*ifelse(Facing=1,-1,1)<0) ,-1 ,1 )
 ignorehitpause = 1
@@ -3482,7 +4382,7 @@ ignorehitpause = 1
 type = Null
 triggerall = IsHelper
 triggerall = AnimElemTime(1) = 2
-triggerall = Anim = 6075
+triggerall = Anim = 4175
 trigger1 = 1||fvar(0) := Abs( Pos X - EnemyNear,Pos X )
 trigger1 = 1||fvar(1) := Abs( Pos Y - EnemyNear,Pos Y )
 persistent = 256
@@ -3491,7 +4391,7 @@ ignorehitpause = 1
 [State 4004, 角度変更]
 type = Null
 triggerall = IsHelper
-triggerall = Anim = 6075
+triggerall = Anim = 4175
 trigger1 = fvar(0) && fvar(1)
 trigger1 = var(1)  := Ceil( Atan(fvar(0)/fvar(1))*(180/Pi) )
 trigger2 = fvar(0) && !fvar(1)
@@ -3512,7 +4412,7 @@ ignorehitpause = 1
 type = VelSet
 trigger1 = IsHelper
 trigger1 = AnimElemTime(1) > 2
-trigger1 = Anim = 6075
+trigger1 = Anim = 4175
 trigger1 = fvar(5) := Sin(var(1)/(180/Pi))
 x = Sin(var(1)/(180/Pi))*24
 persistent  =256
@@ -3522,7 +4422,7 @@ ignorehitpause = 1
 type = VelSet
 trigger1 = IsHelper
 trigger1 = AnimElemTime(1) > 2
-trigger1 = Anim = 6075
+trigger1 = Anim = 4175
 trigger1 = fvar(6) := Cos(var(1)/(180/Pi))*24
 y = Cos(var(1)/(180/Pi))*24
 persistent  =256
@@ -3530,21 +4430,21 @@ ignorehitpause = 1
 
 [state 6035]
 type = VelSet
-trigger1 = Anim = 6076
+trigger1 = Anim = 4176
 Y = 0
 X = 0
 ignorehitpause = 1
 
 [state 6035]
 type = PosSet
-trigger1 = Anim = 6076
+trigger1 = Anim = 4176
 trigger1 = var(2) = 0
 Y = 0
 ignorehitpause = 1
 
 [state 6035]
 type = PosSet
-trigger1 = Anim = 6076
+trigger1 = Anim = 4176
 trigger1 = var(2) = 1
 X = EnemyNear,Pos X+fvar(2)
 Y = EnemyNear,Pos Y+fvar(3)
@@ -3552,14 +4452,14 @@ ignorehitpause = 1
 
 [state 6035]
 type = PlaySnd
-trigger1 = Anim = 6076
+trigger1 = Anim = 4176
 trigger1 = AnimElemTime(1) = 1
 value = s0,73
 ignorehitpause = 1
 
 [state 6035]
 type = ChangeAnim
-triggerall = Anim = 6075
+triggerall = Anim = 4175
 trigger1 = Vel Y > 0
 trigger1 = Pos Y >= -15
 trigger1 = 1 || var(2) := 0
@@ -3568,7 +4468,7 @@ trigger2 = NumTarget
 trigger2 = 1 || var(2) := 1
 trigger2 = 1 || fvar(2) := Pos X-EnemyNear,Pos X
 trigger2 = 1 || fvar(3) := Pos Y-EnemyNear,Pos Y
-value = 6076
+value = 4176
 ignorehitpause = 1
 
 [State 1011,]
@@ -3581,8 +4481,8 @@ guardflag =
 animtype  = diagup
 damage    = 150,25
 pausetime = 0,30
-sparkno = S6028
-guard.sparkno = S6084
+SparkNo = S4128
+guard.SparkNo = S4184
 sparkxy = 0,0
 hitsound   = s0,22
 guardsound = -1
@@ -3602,7 +4502,7 @@ ignorehitpause = 1
 
 [State 6035]
 type = SelfState
-trigger1 = Anim = 6076
+trigger1 = Anim = 4176
 trigger1 = !AnimTime
 value = 2147483646
 ignorehitpause = 1
@@ -3699,7 +4599,7 @@ ignorehitpause = 1
 [State 210, アニメ変更]
 type = ChangeAnim
 trigger1 = Anim != [4036,4038]
-value = 4036
+value = 4038;4036
 ignorehitpause = 1
 
 [State -1]
@@ -3797,10 +4697,10 @@ IgnoreHitPause = 1
 Type = Explod
 Trigger1 = Anim = 4038
 Trigger1 = AnimElemTime(7) = 0
-ID = 6054
+ID = 4154
 PosType = Left
 Pos = 0,0
-Anim = 6054
+Anim = 4154
 Ownpal = 1
 SprPriority = -6
 Persistent = 0
@@ -3812,10 +4712,10 @@ SuperMoveTime = 9999
 Type = Explod
 Trigger1 = Anim = 4038
 Trigger1 = AnimElemTime(41) = 0
-ID = 6055
+ID = 4155
 PosType = Left
 Pos = 0,0
-Anim = 6055
+Anim = 4155
 Scale = 0.5,0.5
 Ownpal = 1
 SprPriority = -6
@@ -3828,8 +4728,8 @@ SuperMoveTime = 9999
 Type = Helper
 Trigger1 = Anim = 4038
 Trigger1 = AnimElemTime(43) = 0
-StateNo = 6058
-ID = 6058
+StateNo = 4158
+ID = 4158
 PosType = P1
 Pos = 0,0
 Ownpal = 1
@@ -3861,8 +4761,8 @@ Darken = 0
 type = Explod
 Trigger1 = Anim = 4036
 Trigger1 = AnimElemTime(1) = 34
-anim = 6059
-ID = 6059
+Anim = 4159
+ID = 4159
 postype = Back
 pos = 0,0
 scale = 1,1
@@ -3892,11 +4792,11 @@ trigger1 = Anim = 4036
 trigger1 = AnimElemTime(4) > 0
 trigger1 = AnimElemTime(39) < 0
 trigger1 = !NumProjID(4036)
-projID = 4036
+projID = 4136
 projhits = 1
 projremove = 0
 projremovetime = 11
-projanim = 6060
+projAnim = 4160
 velocity = 0,0
 projedgebound = 999
 projstagebound = 999
@@ -3913,7 +4813,7 @@ pausetime = 0,3
 guard.pausetime = 0,1
 ground.slidetime = 17
 ground.hittime = 17
-sparkno = S6000+Random%2
+SparkNo = S4100+Random%2
 sparkxy = -Floor(EnemyNear(var(58)),BackEdgeBodyDist),Floor((EnemyNear(var(58)),Const(size.head.pos.y)+Floor(P2BodyDist Y))*(1-(P2StateType=C)*0.5))
 hitsound = -1
 guardsound = -1
@@ -3949,7 +4849,7 @@ ignorehitpause = 1
 ;	固有結界・枯渇庭園ヘルパー
 ;---------------------------------------------------------------------------
 
-[Statedef 6058]
+[Statedef 4158]
 Type = A
 MoveType = A
 Physics = N
@@ -3960,8 +4860,8 @@ movehitpersist = 1
 
 [State -1]
 Type = ChangeAnim
-Trigger1 = Anim != 6058
-value = 6058
+Trigger1 = Anim != 4158
+value = 4158
 IgnoreHitPause = 1
 
 [State -1]
@@ -3975,11 +4875,11 @@ IgnoreHitPause = 1
 Type = Explod
 Triggerall = sysvar(0) > 0
 Trigger1 = GameTime%5 = 0
-ID = 6056
+ID = 4156
 PosType = Left
 Pos = 280,0
 Random = 320,40
-Anim = 6056+Random%2
+Anim = 4156+Random%2
 Vel = (-6-Random%5)*0.5,(6+Random%5)*0.5
 Scale = IfElse(Var(3)=0,0.375,0.75),IfElse(Var(3)=0,0.375,0.75)
 Ownpal = 1
@@ -4009,7 +4909,7 @@ PauseTime = 1,IfElse(P2StateType=A,30,29)+IfElse(P2MoveType=A,5,0)+6
 Guard.PauseTime = 1,29
 HitSound   = s0,19
 GuardSound = s0,30
-SparkNo = S6000+Random%2
+SparkNo = S4100+Random%2
 Sparkxy = 0,-50
 Guard.SparkNo = -1
 Ground.Type = Low
@@ -4052,7 +4952,7 @@ PauseTime = 1,2
 Guard.PauseTime = 1,29
 HitSound   = s0,19
 GuardSound = s0,30
-SparkNo = S6000+Random%2
+SparkNo = S4100+Random%2
 Guard.SparkNo = -1
 Ground.Type = Low
 Air.Type = Low
@@ -4128,8 +5028,8 @@ Trigger1 = Target(5600),Time >= 4
 Trigger1 = Target(5600),Time%6 = 4
 Trigger1 = Target(5600),StateNo = 5115
 Trigger1 = Target(5600),Pos Y >= -45
-Anim = 6023
-ID = 6023
+Anim = 4123
+ID = 4123
 Postype = P2
 Pos = 0,-Ceil(Target(5600),Pos Y)
 Ownpal = 1
@@ -4143,8 +5043,8 @@ Type = Explod
 Trigger1 = NumTarget(5600) > 0
 Trigger1 = Target(5600),Time = 1
 Trigger1 = Target(5600),StateNo = 5117 || Target(5600),StateNo = 5118
-Anim = 6034
-ID = 6034
+Anim = 4134
+ID = 4134
 Postype = P2
 Pos = -5,Const(Size.Mid.Pos.Y)-5
 Scale = 0.5,0.5
@@ -4250,8 +5150,8 @@ value = s0,57
 [State 210, エフェクト兼攻撃ヘルパー]
 type = Helper
 trigger1 = AnimElemTime(7) = 0
-ID = 6040
-StateNo = 6040
+ID = 4140
+StateNo = 4140
 name = "Explod_Helper"
 helpertype = Player
 keyctrl = 0
@@ -4268,7 +5168,7 @@ ctrl = 1
 ;	蛇
 ;---------------------------------------------------------------------------
 
-[Statedef 6040]
+[Statedef 4140]
 type = C
 movetype = I
 physics = N
@@ -4290,13 +5190,13 @@ ignorehitpause = 1
 
 [State -1]
 Type = SelfState
-TriggerAll = IsHelper(6040)
-Trigger1 = Anim = 6040
+TriggerAll = IsHelper(4140)
+Trigger1 = Anim = 4140
 Trigger1 = AnimElemTime(5) > 0
 Trigger1 = Abs( Pos X-EnemyNear,Pos X ) = [10,35]
 Trigger1 = Pos Y-EnemyNear,Pos Y = [-10,10]
-Trigger2 = Anim = 6041
-Value = 6041
+Trigger2 = Anim = 4141
+Value = 4141
 IgnoreHitPause = 1
 
 [State 6040, 2]
@@ -4313,8 +5213,8 @@ ignorehitpause = 1
 
 [State 6035, 1]
 type = ChangeAnim
-trigger1 = Anim != 6040
-value = 6040
+trigger1 = Anim != 4140
+value = 4140
 ignorehitpause = 1
 
 [State -1]
@@ -4348,7 +5248,7 @@ value = ifelse( MoveType=I ,5150 ,120 )
 ctrl = 0
 ignorehitpause = 1
 
-[Statedef 6041]
+[Statedef 4141]
 type = C
 movetype = A
 physics = N
@@ -4359,8 +5259,8 @@ hitdefpersist = 1
 
 [State 6035, 1]
 type = ChangeAnim
-trigger1 = Anim != 6041
-value = 6041
+trigger1 = Anim != 4141
+value = 4141
 ignorehitpause = 1
 
 [State -1 ,鳴き声]
@@ -4371,8 +5271,8 @@ value = s0,58
 [State -1]
 Type = Explod
 Trigger1 = AnimElem = 5
-Anim = 6042
-ID = 6042
+Anim = 4142
+ID = 4142
 PosType = P1
 Pos = 0,0
 Ownpal = 1
@@ -4406,7 +5306,7 @@ PauseTime = 2,2
 Guard.PauseTime = 2,2
 HitSound   = s0,22
 GuardSound = s0,30
-SparkNo = S6000+Random%2
+SparkNo = S4100+Random%2
 Guard.SparkNo = -1
 Ground.Type = Low
 Air.Type = Low
@@ -4544,7 +5444,7 @@ ignorehitpause = 1
 [State -1]
 Type = RemoveExplod
 Trigger1 = AnimElem = 27
-ID = 6042
+ID = 4142
 ignorehitpause = 1
 
 [State 6041 ,消す]
@@ -4681,24 +5581,24 @@ ignorehitpause = 1
 Type = Explod
 trigger1 = Anim = 4050
 Trigger1 = AnimElem = 3
-Anim = 6022
-ID = 6022
+Anim = 4122
+ID = 4122
 PosType = P1
 Pos = 0,0
 Ownpal = 1
 SprPriority = 4
 BindTime = -1
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
 Type = Explod
 triggerall = Anim = 4050
 Trigger1 = AnimElemTime(4) = 1
-Anim = 6050
-ID = 6050
+Anim = 4150
+ID = 4150
 PosType = P1
 Pos = 0,0
 Ownpal = 1
@@ -4706,16 +5606,16 @@ SprPriority = 4
 BindTime = -1
 persistent = 256
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
 Type = Explod
 triggerall = Anim = 4050
 Trigger1 = AnimElemTime(4) = 1
-Anim = 6051
-ID = 6051
+Anim = 4151
+ID = 4151
 PosType = P1
 Pos = 0,0
 Ownpal = 1
@@ -4723,16 +5623,16 @@ SprPriority = 4
 BindTime = -1
 persistent = 256
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
 Type = Explod
 triggerall = Anim = 4050
 Trigger1 = AnimElemTime(4) = 1
-Anim = 6052
-ID = 6052
+Anim = 4152
+ID = 4152
 PosType = P1
 Pos = 0,0
 Ownpal = 1
@@ -4740,16 +5640,16 @@ SprPriority = 4
 BindTime = -1
 persistent = 256
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
 Type = Explod
 triggerall = Anim = 4050
 Trigger1 = AnimElemTime(4) = 1
-Anim = 6053
-ID = 6053
+Anim = 4153
+ID = 4153
 PosType = P1
 Pos = 0,0
 Ownpal = 1
@@ -4757,8 +5657,8 @@ SprPriority = 4
 BindTime = -1
 persistent = 256
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
@@ -4773,7 +5673,7 @@ PauseTime = 0,0
 Guard.PauseTime = 10,10
 HitSound   = s0,22
 GuardSound = s0,30
-SparkNo = S6000+Random%2
+SparkNo = S4100+Random%2
 Guard.SparkNo = -1
 Ground.Type = Low
 Air.Type = Low
@@ -4804,7 +5704,7 @@ GivePower = 110, 94
 EnvShake.Time = 6
 EnvShake.Freq = 90
 EnvShake.Ampl = 6
-ID = 4050
+ID = 4150
 
 [State 4050, 腕振り音]
 type = AngleDraw
@@ -4832,8 +5732,8 @@ ignorehitpause = 1
 Type = Explod
 trigger1 = Anim = 4051
 Trigger1 = AnimElem = 1
-Anim = 6023
-ID = 6023
+Anim = 4123
+ID = 4123
 PosType = P1
 Pos = 0,0
 Ownpal = 1
@@ -4965,40 +5865,40 @@ ignorehitpause = 1
 Type = Explod
 trigger1 = Anim = 4050
 Trigger1 = AnimElem = 3
-Anim = 6009
-ID = 6009
+Anim = 4109
+ID = 4109
 PosType = P1
 Pos = 0,0
 Ownpal = 1
 SprPriority = 4
 BindTime = 1
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
 Type = Explod
 trigger1 = Anim = 4050
 Trigger1 = AnimElem = 3
-Anim = 6010
-ID = 6010
+Anim = 4110
+ID = 4110
 PosType = P1
 Pos = 0,0
 Ownpal = 1
 SprPriority = 4
 BindTime = 1
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
 Type = Explod
 triggerall = Anim = 4050
 Trigger1 = AnimElemTime(4) = 1
-Anim = 6050
-ID = 6050
+Anim = 4150
+ID = 4150
 PosType = P1
 Pos = 0,0
 Ownpal = 1
@@ -5006,16 +5906,16 @@ SprPriority = 4
 BindTime = -1
 persistent = 256
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
 Type = Explod
 triggerall = Anim = 4050
 Trigger1 = AnimElemTime(4) = 1
-Anim = 6051
-ID = 6051
+Anim = 4151
+ID = 4151
 PosType = P1
 Pos = 0,0
 Ownpal = 1
@@ -5023,16 +5923,16 @@ SprPriority = 4
 BindTime = -1
 persistent = 256
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
 Type = Explod
 triggerall = Anim = 4050
 Trigger1 = AnimElemTime(4) = 1
-Anim = 6052
-ID = 6052
+Anim = 4152
+ID = 4152
 PosType = P1
 Pos = 0,0
 Ownpal = 1
@@ -5040,16 +5940,16 @@ SprPriority = 4
 BindTime = -1
 persistent = 256
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
 Type = Explod
 triggerall = Anim = 4050
 Trigger1 = AnimElemTime(4) = 1
-Anim = 6053
-ID = 6053
+Anim = 4153
+ID = 4153
 PosType = P1
 Pos = 0,0
 Ownpal = 1
@@ -5057,8 +5957,8 @@ SprPriority = 4
 BindTime = -1
 persistent = 256
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
@@ -5074,7 +5974,7 @@ PauseTime = 0,0
 Guard.PauseTime = 10,10
 HitSound   = s0,22
 GuardSound = s0,30
-SparkNo = S6000+Random%2
+SparkNo = S4100+Random%2
 Guard.SparkNo = -1
 Ground.Type = Low
 Air.Type = Low
@@ -5143,8 +6043,8 @@ ignorehitpause = 1
 Type = Explod
 trigger1 = Anim = 4051
 Trigger1 = AnimElem = 1
-Anim = 6023
-ID = 6023
+Anim = 4123
+ID = 4123
 PosType = P1
 Pos = 0,0
 Ownpal = 1
@@ -5230,40 +6130,40 @@ ignorehitpause = 1
 Type = Explod
 trigger1 = Anim = 4050
 Trigger1 = AnimElem = 3
-Anim = 6009
-ID = 6009
+Anim = 4109
+ID = 4109
 PosType = P1
 Pos = 0,0
 Ownpal = 1
 SprPriority = 4
 BindTime = 1
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
 Type = Explod
 trigger1 = Anim = 4050
 Trigger1 = AnimElem = 3
-Anim = 6010
-ID = 6010
+Anim = 4110
+ID = 4110
 PosType = P1
 Pos = 0,0
 Ownpal = 1
 SprPriority = 4
 BindTime = 1
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
 Type = Explod
 triggerall = Anim = 4050
 Trigger1 = AnimElemTime(4) = 1
-Anim = 6050
-ID = 6050
+Anim = 4150
+ID = 4150
 PosType = P1
 Pos = 0,0
 Ownpal = 1
@@ -5271,16 +6171,16 @@ SprPriority = 4
 BindTime = -1
 persistent = 256
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
 Type = Explod
 triggerall = Anim = 4050
 Trigger1 = AnimElemTime(4) = 1
-Anim = 6051
-ID = 6051
+Anim = 4151
+ID = 4151
 PosType = P1
 Pos = 0,0
 Ownpal = 1
@@ -5288,16 +6188,16 @@ SprPriority = 4
 BindTime = -1
 persistent = 256
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
 Type = Explod
 triggerall = Anim = 4050
 Trigger1 = AnimElemTime(4) = 1
-Anim = 6052
-ID = 6052
+Anim = 4152
+ID = 4152
 PosType = P1
 Pos = 0,0
 Ownpal = 1
@@ -5305,16 +6205,16 @@ SprPriority = 4
 BindTime = -1
 persistent = 256
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
 Type = Explod
 triggerall = Anim = 4050
 Trigger1 = AnimElemTime(4) = 1
-Anim = 6053
-ID = 6053
+Anim = 4153
+ID = 4153
 PosType = P1
 Pos = 0,0
 Ownpal = 1
@@ -5322,8 +6222,8 @@ SprPriority = 4
 BindTime = -1
 persistent = 256
 RemoveOnGetHit = 1
-SuperMoveTime = 2147483647 * NumHelper(6062)
-PauseMoveTime = 2147483647 * NumHelper(6062)
+SuperMoveTime = 2147483647 * NumHelper(4162)
+PauseMoveTime = 2147483647 * NumHelper(4162)
 IgnoreHitPause = 1
 
 [State -1]
@@ -5339,7 +6239,7 @@ PauseTime = 2,2
 Guard.PauseTime = 10,10
 HitSound   = s0,22
 GuardSound = s0,30
-SparkNo = S6000+Random%2
+SparkNo = S4100+Random%2
 Guard.SparkNo = -1
 Ground.Type = Low
 Air.Type = Low
@@ -5402,8 +6302,8 @@ ignorehitpause = 1
 Type = Explod
 trigger1 = Anim = 4051
 Trigger1 = AnimElem = 1
-Anim = 6023
-ID = 6023
+Anim = 4123
+ID = 4123
 PosType = P1
 Pos = 0,0
 Ownpal = 1
