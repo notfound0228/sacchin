@@ -9,6 +9,60 @@
 type = U
 
 ;---------------------------------------------------------------------------
+;	デバッグ関係
+;---------------------------------------------------------------------------
+
+[State -2, デバッグ用 - ダッシュ切り替え2]
+type = RemoveExplod
+trigger1 = !IsHelper
+trigger1 = NumExplod(2147483647)
+trigger1 = NumExplod(2147483646)
+trigger1 = command = "start"
+ID = 2147483647
+ignorehitpause = 1
+
+[State -2, デバッグ用 - ダッシュ切り替え]
+type = Explod
+trigger1 = !IsHelper
+trigger1 = command = "start"
+trigger1 = !NumExplod(2147483647)
+trigger1 = !NumExplod(2147483646)
+ID = 2147483647
+anim = 0
+RemoveTime = -1
+Scale = 0,0
+SuperMovetime = 2147483646
+PauseMoveTime = 2147483646
+ignorehitpause = 1
+
+[State -2, デバッグ用 - ダッシュ切り替えフラグ]
+type = Explod
+trigger1 = !IsHelper
+trigger1 = NumExplod(2147483647)
+trigger1 = !NumExplod(2147483646)
+ID = 2147483646
+anim = 0
+RemoveTime = -1
+Scale = 0,0
+SuperMovetime = 2147483646
+PauseMoveTime = 2147483646
+ignorehitpause = 1
+
+[State -2, デバッグ用 - ダッシュ切り替えフラグ用]
+type = RemoveExplod
+trigger1 = !IsHelper
+trigger1 = !NumExplod(2147483647)
+trigger1 = NumExplod(2147483646)
+ID = 2147483646
+ignorehitpause = 1
+
+;	ダッシュに攻撃判定がある事と、スピードが乗りすぎると貫通したり
+;	すぐに壁に送ってしまいデバッグがしづらいので。
+;	正式に発表する時は切る。
+
+
+
+;---------------------------------------------------------------------------
 ;	ヘルパーの常時処理 & ステート固定関係
 ;---------------------------------------------------------------------------
 
@@ -94,7 +148,7 @@ ignorehitpause = 1
 [State -2, 距離把握]
 type = varset
 trigger1 = !IsHelper
-trigger1 = !NumHelper(6062)
+trigger1 = !NumHelper(4162)
 var(2) = Power
 ignorehitpause = 1
 
@@ -102,7 +156,7 @@ ignorehitpause = 1
 type = varset
 trigger1 = !IsHelper
 trigger1 = StateNo != 4011
-trigger1 = NumHelper(6062)
+trigger1 = NumHelper(4162)
 var(2) = var(2) - 10
 ignorehitpause = 1
 
@@ -112,7 +166,7 @@ ignorehitpause = 1
 [State -2, 時止め演出中の時止め]
 type = SuperPause
 trigger1 = !IsHelper
-trigger1 = NumHelper(6062)
+trigger1 = NumHelper(4162)
 darken = 0
 time = 3
 anim = -1

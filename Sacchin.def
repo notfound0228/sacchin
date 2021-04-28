@@ -6,37 +6,29 @@ versiondate = 10,19,2016
 mugenversion = 04,14,2002
 author = "Discord"
 pal.defaults = 1,4,7
-;Bus
 ;3104(Satoshi)
 ;Zanga
 ;Unknown37564
 ;Notfound
-;Kira
-;Konton NO kotowarI
 ;Glacies
 ;Sukima
-; BUSaZ KiNG SuKo
 [Files]
 cmd     = CNS/Sacchin_cmd.cns
 cns     = Sacchin.def ;CNS/Sacchin.cns 
-st      = CNS/Sacchin_etc.cns
-st0     = CNS/Sacchin_Bus.cns
-st1     = CNS/Sacchin_3104.cns
-st2     = CNS/Sacchin_Zanga.cns
-st3     = CNS/Sacchin_Unknown37564.cns
-st4     = CNS/Sacchin_Notfound.cns
-st5     = CNS/Sacchin_Kira.cns
-st6     = CNS/Sacchin_KontonNOkotowarI.cns
-st7     = CNS/Sacchin_Glacies.cns
-st8     = CNS/Sacchin_-2-3.cns
-st9     = config.txt
+st     = CNS/Sacchin_3104.cns
+st0     = CNS/Sacchin_Zanga.cns
+st1     = CNS/Sacchin_Unknown37564.cns
+st2     = CNS/Sacchin_Notfound.cns
+st3     = CNS/Sacchin_Glacies.cns
+st4     = CNS/Sacchin_-2-3.cns
+st5     = config.txt
 stcommon = CNS/Sacchincommon.cns ;Common states
 sprite  = DATA/Sacchin.sff   ;Sprite
 anim    = DATA/Sacchin.air   ;Animation
 sound   = DATA/Sacchin.snd   ;Sound
 pal1    = ACT/Unknown37564.act
 pal2    = ACT/3104.act
-pal3    = ACT/Notfound.act
+pal3    = ACT/krsmsho.act
 pal4    = ACT/Notfound.act
 pal5    = ACT/Notfound.act
 pal6    = ACT/Notfound.act

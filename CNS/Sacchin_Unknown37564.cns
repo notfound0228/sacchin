@@ -1793,6 +1793,7 @@ type = S
 movetype = I
 physics = N
 ctrl  = 0
+velset = 0,0
 
 [State 4008, アニメ変更]
 type = ChangeAnim
@@ -2112,7 +2113,7 @@ p2facing = 1
 fall = 0
 fall.recover = 0
 yaccel = .55
-ID = 4111
+ID = 4011
 kill = 0
 getpower = 0
 givepower = 15,15
@@ -2473,7 +2474,7 @@ trigger1 = Anim = 4015
 trigger1 = NumTarget(4011)
 trigger1 = Animelem = 5
 value = 4019
-ID = 4111
+ID = 4011
 
 [State 1211, vel]
 type = VelSet
@@ -2534,7 +2535,7 @@ ignorehitpause = 1
 
 [State 1210, targetbind]
 type = PosSet
-trigger1 = Enemy(Enemy,Name!="Sacchin"),StateNo = 4114
+trigger1 = Enemy(Enemy,Name!="Sacchin"),StateNo = 4014
 x = (EnemyNear,Pos X) + ifelse( Enemy(Enemy,Name!="Sacchin"),Facing=1 ,10 , -10 )
 y = (EnemyNear,Pos Y) - 60
 ;	bindだと落下時にVelが入ってるのに降下しない不具合が出たので
@@ -2595,7 +2596,7 @@ edge = 0,-100
 
 [State 1210, targetbind]
 type = PosSet
-trigger1 = Enemy(Enemy,Name!="Sacchin"),StateNo = 4115
+trigger1 = Enemy(Enemy,Name!="Sacchin"),StateNo = 4015
 x = (EnemyNear,Pos X) + ifelse( Enemy(Enemy,Name!="Sacchin"),Facing=1 ,50 , -50 )
 y = (EnemyNear,Pos Y) - 60
 ;	bindだと落下時にVelが入ってるのに降下しない不具合が出たので
@@ -2720,6 +2721,7 @@ type = S
 movetype = A
 physics = N
 ctrl  = 0
+sprpriority = 3
 
 [State 4021, アニメ変更]
 type = ChangeAnim
@@ -2739,15 +2741,11 @@ trigger1 = !IsHelper
 flag = TimerFreeze
 flag2= GlobalNoShadow
 
-[State 4021, 時止め]
-type = SuperPause
-trigger1 = AnimElem = 1
-darken = 0
-time = 59
-anim = -1
-pos = 0,0
-movetime = 59
-unhittable = 0
+[State 4021, 慣性消去]
+type = VelSet
+trigger1 = AnimElemTime(1) = 0
+x = 0
+y = 0
 ignorehitpause = 1
 
 [State 230, 眼光エフェクトヘルパー]
@@ -2764,6 +2762,17 @@ Size.XScale = 0.5
 Size.YScale = 0.5
 SuperMovetime = 2147483646
 PauseMoveTime = 2147483646
+ignorehitpause = 1
+
+[State 4021, 時止め]
+type = SuperPause
+trigger1 = AnimElem = 1
+darken = 0
+time = 59
+anim = -1
+pos = 0,0
+movetime = 59
+unhittable = 0
 ignorehitpause = 1
 
 [State 4012, 砂塵エフェクト1]
@@ -3052,7 +3061,7 @@ ignorehitpause = 1
 type = HitDef
 Trigger1 = 1
 Attr = S, ST
-HitFlag = MA
+HitFlag = MAFD
 priority = 1, Miss
 sparkno = -1
 p2facing = 1
@@ -3330,6 +3339,7 @@ type = S
 MoveType = A
 physics = S
 ctrl = 0
+sprpriority = 3
 
 [State 210, アニメ変更]
 type = ChangeAnim
@@ -4599,7 +4609,7 @@ ignorehitpause = 1
 [State 210, アニメ変更]
 type = ChangeAnim
 trigger1 = Anim != [4036,4038]
-value = 4038;4036
+value = 4036
 ignorehitpause = 1
 
 [State -1]
@@ -4792,7 +4802,7 @@ trigger1 = Anim = 4036
 trigger1 = AnimElemTime(4) > 0
 trigger1 = AnimElemTime(39) < 0
 trigger1 = !NumProjID(4036)
-projID = 4136
+projID = 4036
 projhits = 1
 projremove = 0
 projremovetime = 11
@@ -4808,7 +4818,7 @@ guardflag = M
 animtype = Hard
 ground.type = High
 priority = 7,Hit
-damage = Ceil(EnemyNear,LifeMax*0.05),Ceil(EnemyNear,LifeMax*0.005)
+damage = Ceil(EnemyNear,LifeMax*0.01),Ceil(EnemyNear,LifeMax*0.001)
 pausetime = 0,3
 guard.pausetime = 0,1
 ground.slidetime = 17

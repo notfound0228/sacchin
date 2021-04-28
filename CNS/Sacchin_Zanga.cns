@@ -870,6 +870,7 @@ IgnoreHitPause = 1
 
 [State -1]
 Type = TargetBind
+Trigger1 = AnimTime < 0
 Trigger1 = AnimElemNo(0) < 5
 Pos = 0,0
 [State -1]
@@ -957,7 +958,101 @@ Trigger1 = AnimTime = 0
 Value = 0
 Ctrl = 1
 
+;---------------------------
+;	Unknown37564追記
 
+[State 3500, 空中音声]
+Type = Playsnd
+Trigger1 = AnimElemTime(5) = 0
+value = s0,6
+IgnoreHitPause = 1
+
+[State 3500, 空中音声]
+Type = Playsnd
+Trigger1 = AnimElemTime(5) = 0
+Trigger2 = AnimElemTime(13) = 0
+value = s0,47
+IgnoreHitPause = 1
+
+[State 3500, 飛び上がり音]
+Type = Playsnd
+Trigger1 = AnimElemTime(5) = 0
+value = s0,5
+IgnoreHitPause = 1
+
+[State 3500, 叩きつけ音声1]
+Type = Playsnd
+Trigger1 = AnimElemTime(13) = 0
+value = s0,48
+IgnoreHitPause = 1
+
+[State 3500, 叩きつけ音声1]
+Type = Playsnd
+Trigger1 = AnimElemTime(13) = 0
+value = s0,49
+IgnoreHitPause = 1
+
+[State 3500, 叩きつけ音声1]
+Type = Playsnd
+Trigger1 = AnimElemTime(13) = 0
+value = s0,28
+IgnoreHitPause = 1
+
+[State 3500, 叩きつけ音声1]
+Type = Playsnd
+Trigger1 = AnimElemTime(13) = 0
+value = s0,29
+IgnoreHitPause = 1
+
+[State 3500, 叩きつけ音声1]
+Type = Playsnd
+Trigger1 = AnimElemTime(13) = 2
+value = s0,54
+IgnoreHitPause = 1
+
+[State 3500, 叩きつけ音声1]
+Type = Playsnd
+Trigger1 = AnimElemTime(13) = 3
+value = s0,66
+IgnoreHitPause = 1
+
+[State 3500, 摩擦音]
+Type = Playsnd
+Trigger1 = AnimElemTime(21) = 0
+value = s3500,0
+IgnoreHitPause = 1
+
+[State 3500, 摩擦音]
+Type = Playsnd
+Trigger1 = AnimElemTime(21) = 0
+value = s0,5
+IgnoreHitPause = 1
+
+[State 3500, 飛び上がり時砂塵]
+Type = Explod
+Trigger1 = AnimElemTime(5) = 0
+Anim = 4111
+PosType = P1
+Pos = 0,0
+Scale = 1,1
+OwnPal = 1
+PauseMoveTime = 999
+SuperMoveTime = 999
+SprPriority = 4
+IgnoreHitPause = 1
+
+[State 3500, 飛び上がり時砂塵2]
+Type = Explod
+Trigger1 = AnimElemTime(5) = 0
+Anim = 4112
+PosType = P1
+Pos = 0,0
+Scale = 1,1
+OwnPal = 1
+PauseMoveTime = 999
+SuperMoveTime = 999
+SprPriority = 5
+IgnoreHitPause = 1
 
 ;---------------------------------------------------------------------------
 [StateDef 3550]
@@ -1005,6 +1100,7 @@ IgnoreHitPause = 1
 [State -1]
 Type = SelfState
 Trigger1 = AnimTime = 0
+Trigger1 = Enemy(Enemy,Name!="Sacchin"),Ctrl
 Value = 5120
 
 

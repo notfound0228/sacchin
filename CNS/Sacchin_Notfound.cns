@@ -19,7 +19,7 @@ trigger1 = 1
 type    = S
 movetype= I
 physics = N
-anim = 0
+anim = 2147483647
 
 [State 99999, IsNotHelperDead]
 type = SelfState
@@ -70,7 +70,56 @@ var(0) = -1
 ignorehitpause = 1
 
 ;-------------------------------
+;ここまでNotFound記述
+;ここからUnknown37564追加記述
 
+[State 99999, 小ジャンプ判定]
+type = Explod
+trigger1 = !NumExplod(9999)
+trigger1 = !Root,var(59)
+trigger1 = Root,StateNo = [40,41]
+trigger1 = Root,Command != "holdup"
+ID = 9999
+anim = 0
+RemoveTime = -1
+RemoveOnGetHit = 1
+Scale = 0,0
+SuperMovetime = 2147483646
+PauseMoveTime = 2147483646
+ignorehitpause = 1
+
+[State 99999, 小ジャンプ判定削除]
+type = RemoveExplod
+triggerall = ((Root,StateNo=[40,41])&&(Root,AnimElemTime(1)=1))||!(Root,StateNo=[40,52])||(Root,StateNo=52)&&(var(2)>var(1))
+trigger1 = 1 || var(1) := 0
+trigger1 = 1 || var(2) := 0
+ID = 9999
+
+[State 99999, holdup入力時間計測]
+type = VarSet
+trigger1 = !NumExplod(9999)
+var(1) = ifelse( (Root,StateNo=[40,41]) ,var(1)+1 ,0 )
+ignorehitpause = 1
+
+[State 99999, 着地硬直算出]
+type = Null
+triggerall = NumExplod(9999)
+triggerall = Root,StateNo = 52
+trigger1 = var(2) = 0
+trigger1 = var(2) := 1
+; 着地硬直15Fから引算
+trigger2 = var(2) < var(1)
+trigger2 = ((Root,Anim=47)&&(Root,AnimElemTime(3)>=0))||((Root,Anim=48)&&(Root,AnimElemTime(4)>=0))||((Root,Anim=49)&&(Root,AnimElemTime(3)>=0))
+trigger2 = var(2) := var(2) + 1
+; 着地硬直からカウント開始
+ignorehitpause = 1
+
+[State 99999, 小ジャンプ計算リセット]
+type = Null
+triggerall = !(Root,StateNo=[40,52])||(Root,StateNo=52)&&!NumExplod(9999)
+trigger1 = 1 || var(1) := 0
+trigger1 = 1 || var(2) := 0
+; RemoveExplodと併用すると競合して小ジャンプ連打バグが発生する為
 
 ;--------------------------------------------------------------------------------------------------
 ;	ステージ端探知

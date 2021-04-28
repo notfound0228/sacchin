@@ -471,7 +471,7 @@ trigger2 = MoveContact
 ;ƒ_ƒbƒVƒ…
 [State -1, Run Fwd]
 type = SelfState
-value = 3750
+value = ifelse( NumExplod(2147483647) ,100 ,3750 )
 triggerall = NumHelper(99999)
 triggerall = (Helper(99999),Command = "FF" && Helper(99999),var(0) = 1)||(Helper(99999),Command = "BB" && Helper(99999),var(0) = -1)
 triggerall = statetype != A

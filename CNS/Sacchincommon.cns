@@ -177,6 +177,7 @@ triggerall = NumHelper(99999)
 triggerall = !Time
 trigger1 = 1
 value = 40
+
 ;　追加 前ジャンプ
 [State 40, Original]
 type = ChangeAnim
@@ -185,6 +186,7 @@ triggerall = !Time
 trigger1 = Helper(99999),Command = "holdfwd" && Helper(99999),var(0) = 1
 trigger2 = Helper(99999),Command = "holdback"&& Helper(99999),var(0) =-1
 value = 41
+
 ;　追加 後ろジャンプ
 [State 40, Original]
 type = ChangeAnim
@@ -197,7 +199,7 @@ value = 42
 [State 40, 6]
 type = Explod
 trigger1 = AnimTime = -1
-anim  = ifelse( Anim=40 ,6011 ,ifelse( Anim=41 ,6009 ,6013 ) )
+anim  = ifelse( Anim=40 ,4111 ,ifelse( Anim=41 ,4109 ,4113 ) )
 Pos      = 0,0
 scale = 1,1
 postype  = p1
@@ -208,7 +210,7 @@ SprPriority = 4
 [State 40, 6]
 type = Explod
 trigger1 = AnimTime = -1
-anim  = ifelse( Anim=40 ,6012 ,ifelse( Anim=41 ,6010 ,6014 ) )
+anim  = ifelse( Anim=40 ,4112 ,ifelse( Anim=41 ,4110 ,4114 ) )
 Pos      = 0,0
 scale = 1,1
 postype  = p1
@@ -228,6 +230,51 @@ trigger1 = AnimTime = 0
 trigger1 = prevstateno = 100 ;RUN_FWD
 x = ifelse(Anim=41,const(velocity.runjump.fwd.x),ifelse(Anim=42,const(velocity.runjump.back.x),-const(velocity.runjump.back.x)))
 
+[State 40, 5]
+type = VelSet
+trigger1 = AnimTime = 0
+trigger1 = prevstateno = 100 ;RUN_FWD
+x = ifelse(Anim=41,const(velocity.runjump.fwd.x),ifelse(Anim=42,const(velocity.runjump.back.x),-const(velocity.runjump.back.x)))
+
+[State 40, 5]
+type = VelSet
+trigger1 = AnimTime = 0
+trigger1 = prevstateno = 100 ;RUN_FWD
+x = ifelse(Anim=41,const(velocity.runjump.fwd.x),ifelse(Anim=42,const(velocity.runjump.back.x),-const(velocity.runjump.back.x)))
+
+
+[State 40, 4]
+type = VelSet
+trigger1 = AnimElemTime(1) >= 2
+trigger1 = NumHelper(99999)
+trigger1 = Helper(99999),NumExplod(9999)
+x = ifelse(Anim=41,const(velocity.jump.fwd.x),ifelse(Anim=42,const(velocity.jump.back.x),const(velocity.jump.neu.x)))
+y = ifelse( (Helper(99999),var(1)>10) ,-(Helper(99999),var(1)) ,const(velocity.jump.y)/2 )
+
+[State 40, 5]
+type = VelSet
+trigger1 = AnimElemTime(1) >= 2
+trigger1 = NumHelper(99999)
+trigger1 = Helper(99999),NumExplod(9999)
+trigger1 = prevstateno = 100 ;RUN_FWD
+x = ifelse(Anim=41,const(velocity.runjump.fwd.x),ifelse(Anim=42,const(velocity.runjump.back.x),-const(velocity.runjump.back.x)))
+
+[State 40, 5]
+type = VelSet
+trigger1 = AnimElemTime(1) >= 2
+trigger1 = NumHelper(99999)
+trigger1 = Helper(99999),NumExplod(9999)
+trigger1 = prevstateno = 100 ;RUN_FWD
+x = ifelse(Anim=41,const(velocity.runjump.fwd.x),ifelse(Anim=42,const(velocity.runjump.back.x),-const(velocity.runjump.back.x)))
+
+[State 40, 5]
+type = VelSet
+trigger1 = AnimElemTime(1) >= 2
+trigger1 = NumHelper(99999)
+trigger1 = Helper(99999),NumExplod(9999)
+trigger1 = prevstateno = 100 ;RUN_FWD
+x = ifelse(Anim=41,const(velocity.runjump.fwd.x),ifelse(Anim=42,const(velocity.runjump.back.x),-const(velocity.runjump.back.x)))
+
 [State 40, 6]
 type = PlaySnd
 trigger1 = AnimTime = 0
@@ -236,6 +283,8 @@ value = s0,8
 [State 40, 6]
 type = ChangeState
 trigger1 = AnimTime = 0
+trigger2 = AnimElemTime(1) >= 2
+trigger2 = Helper(99999),NumExplod(9999)
 value = 50
 ctrl = 1
 
@@ -362,10 +411,27 @@ type = ChangeAnim
 trigger1 = !Time
 value = ifelse(Anim=51, 48, ifelse(Anim=52, 49, 47))
 
+; 追加
+[State 52, 小ジャンプ着地時の硬直差分]
+type = ChangeAnim
+triggerall = NumHelper(99999)
+triggerall = Helper(99999),NumExplod(9999)
+triggerall = Helper(99999),var(2) >= Helper(99999),var(1)
+trigger1 = (Anim=47)&&(AnimElemTime(3)>=0)&&(AnimElemTime(3)<=14)
+trigger2 = (Anim=48)&&(AnimElemTime(4)>=0)&&(AnimElemTime(4)<=14)
+trigger3 = (Anim=49)&&(AnimElemTime(3)>=0)&&(AnimElemTime(3)<=14)
+value = ifelse(Anim=48, 48, ifelse(Anim=49, 49, 47))
+elem = AnimElemNo(0)+1
+;硬直時間より短いF数でジャンプしていたらその硬直分は免除して
+;次Elemへ、それでも遅い！
+
 [State 200, 1]
 type = Helper
 triggerall = PrevStateNo = 50
-trigger1 = AnimElem = 1
+triggerall = NumHelper(99999)
+triggerall = !Helper(99999),NumExplod(9999)
+triggerall = AnimElem = 1
+trigger1 = (Anim = [47,49])
 ID = 4115
 StateNo = 4115
 name = "Explod_Helper"
@@ -381,7 +447,10 @@ ignorehitpause = 1
 [State 200, 1]
 type = Helper
 triggerall = PrevStateNo = 50
-trigger1 = AnimElem = 1
+triggerall = NumHelper(99999)
+triggerall = !Helper(99999),NumExplod(9999)
+triggerall = AnimElem = 1
+trigger1 = (Anim = [47,49])
 ID = 4116
 StateNo = 4115
 name = "Explod_Helper"
@@ -396,7 +465,10 @@ ignorehitpause = 1
 
 [State 52]
 type = EnvShake
-trigger1 = AnimElem = 1
+triggerall = NumHelper(99999)
+triggerall = !Helper(99999),NumExplod(9999)
+triggerall = AnimElem = 1
+trigger1 = (Anim = [47,49])
 time = 10
 Ampl = 10
 
@@ -411,14 +483,21 @@ trigger1 = sysvar(1) = 0
 y = 0
 
 [State 52, 3]
-type = null;CtrlSet
-trigger1 = sysvar(1) = 3
+type = CtrlSet
+;trigger1 = sysvar(1) = 3
+trigger1 = (Anim=47)&&(AnimElemTime(4)=0)
+trigger2 = (Anim=48)&&(AnimElemTime(5)=1)
+trigger3 = (Anim=49)&&(AnimElemTime(4)=0)
 value = 1
 
 [State 52, 4]
 type = SelfState
+triggerall = AnimTime = 0
 trigger1 = Anim = [47,49]
-trigger1 = AnimTime = 0
+trigger2 = Anim = 5
+;  着地時に相手を飛び越していた場合は0番では無く52番で振り向きを行う為、
+;  ここでずっと振り向きアニメを連打し続ける。
+;  52にCtrlを入れておかないと永遠に動けなくなる病気が発生する。
 value = 0
 ctrl = 1
 
@@ -527,11 +606,11 @@ value = 100
 [State 100, 1]
 type = VelSet
 ;trigger1 = 1
-trigger1 = Animelemtime(3) = 0
+trigger1 = Animelemtime(3) >= 0
 x = const(velocity.run.fwd.x)
 
 [State 100, Original]
-type = VelMul
+type = null;VelMul
 trigger1 = Anim = 100
 trigger1 = Animelemtime(3) >= 0
 x = 1.2
@@ -2150,7 +2229,6 @@ ctrl = 1
 type    = U
 movetype= U
 physics = U
-sprpriority = -3
 movehitpersist = 1
 hitdefpersist = 1
 
